@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config>
+	<acl>
+	    <resources>
+	        <admin>
+                <children>
+                    <sales translate="title" module="sales">
+                        <title>Sales</title>
+                        <children>
+                            <order translate="title">
+	            				<title>Orders</title>
+	                            <children>
+	                                <actions translate="title">
+	                                    <title>Actions</title>
+	                                    <children>
+                                            <setstate translate="title"><title>Consultar Status no Moip</title></setstate>
+	               						 </children>
+                                    </actions>
+                                </children>
+                                <sort_order>100</sort_order>
+                    		</order>
+	            		</children>
+	            	</sales>
+	            	<oauthmoip>
+							<title>MOIP Configurações do Oauth</title>
+							<sort_order>10</sort_order>
+		            </oauthmoip>
+				</children>
+	        </admin>
+	    </resources>
+	</acl>
+</config>

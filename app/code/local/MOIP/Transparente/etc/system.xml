@@ -1,0 +1,1144 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <payment translate="label" module="payment">
+            <groups>
+                <moip_transparente_standard translate="label">
+                    <label><![CDATA[Moip Transparente - Configuração Inicial]]></label>
+                    <frontend_type>text</frontend_type>
+                    
+                    <sort_order>10000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <title_setup_moip>
+                            <label>Instalação e Configuração</label>
+                            <frontend_model>transparente/adminhtml_system_config_form_fieldset_modules_oauth</frontend_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </title_setup_moip>
+                        <title_comunicacao translate="label">
+                            <label>Identificação e Escolha do Ambiente de transação</label>
+                            <frontend_model>transparente/adminhtml_system_config_form_fieldset_modules_header</frontend_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title_comunicacao>
+
+                        
+                        <validador_retorno>
+                            <label>Validação de comunicação</label>
+                            <comment><![CDATA[
+                                        <p>Coloque qualquer valor, desde que não contenha espaço ou caracter especial.</p>
+                                        <p>Ex. válido: NomeDaSuaLoja1313.</p>
+                                        <p>Ex. inválido: Nome Da Sua Loja 1313.</p>
+                                    ]]>
+                            </comment>
+                            <tooltip><![CDATA[Isto é um código que irá compor algumas requisões para o módulo, siga as regras de validação para esse campo como descritas acima.]]></tooltip>
+                            <validate>validate-alphanum required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                           
+                        </validador_retorno>
+                        
+                        <ambiente translate="label">
+                            <label>Ambiente</label>
+                            <tooltip><![CDATA[Ambiente de teste exige outro login e senha diferente do ambiente de produção Moip. Caso queira usar o ambiente de teste você deferá criar uma conta.]]>
+                            </tooltip>
+                             <comment><![CDATA[
+                                        <p>Caso não conta tenha conta no Moip Sandbox (ambiente de teste Moip) e queira usar a função testes é necessário <a href="https://cadastro-sandbox.moip.com.br/">crie sua conta clicando aqui.</a></p>
+                                    ]]>
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>MOIP_Transparente_Model_Source_Ambiente</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                           
+                        </ambiente>
+
+                         <apelido translate="label">
+                            <label>Nome Fantasia da Loja</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </apelido>
+
+
+                         <title_status translate="label">
+                            <label>Defina os status de pedidos para o nosso módulo de pagamento</label>
+                            <comment><![CDATA[
+                                        <p>Saiba mais <a href="https://youtu.be/qs9EBHFBptU">no video</a>.</p>
+                                    ]]>
+                            </comment>
+                            <frontend_model>transparente/adminhtml_system_config_form_fieldset_modules_header</frontend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            
+                        </title_status>
+                        <order_status translate="label">
+                            <label>Status dos Pedidos Iniciados</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status_new</source_model>
+                            <comment><![CDATA[
+                                        <p>É o primeiro status de todo o pedido, ele signfica que foi recebida a ordem de compra.</p>
+                                        <p>No entanto o pagamento ainda não foi processado ou válidado.</p>
+                                        <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.]]>
+                            </comment>
+                            <validate>required-entry</validate>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            
+                        </order_status>
+                       
+                        <order_status_holded translate="label">
+                            <label>Status em Análise</label>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>MOIP_Transparente_Model_Source_Holded</source_model>
+                            <comment><![CDATA[
+                                        <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.</p>
+                                    ]]>
+                            </comment>
+                            <sort_order>13</sort_order>
+                            <show_in_default>1</show_in_default>
+                            
+                        </order_status_holded>
+                        <order_status_holded_boleto translate="label">
+                            <label>Status para Boleto em Aberto</label>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>MOIP_Transparente_Model_Source_Holded</source_model>
+                            <comment><![CDATA[
+                                        <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.</p>
+                                    ]]>
+                            </comment>
+                            <sort_order>14</sort_order>
+                            <show_in_default>1</show_in_default>
+                            
+                        </order_status_holded_boleto>
+                        <order_status_holded_tef translate="label">
+                            <label>Status para Transferência em Aberto</label>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>MOIP_Transparente_Model_Source_Holded</source_model>
+                            <comment><![CDATA[
+                                        <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.</p>
+                                    ]]>
+                            </comment>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            
+                        </order_status_holded_tef>
+                        
+                        <title_config_mage translate="label">
+                            <label>Demais configurações</label>
+                            <frontend_model>transparente/adminhtml_system_config_form_fieldset_modules_header</frontend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title_config_mage>
+                        
+                        <active translate="label">
+                            <label>Habilitar venda via admin</label>
+                            <comment>Em beta. Ainda não há retorno do status dessa transação</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>23</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                       
+                        <log>
+                             <label>Habilitar Log</label>
+                            <comment>Durante o primeiro mês é recomendável manter habilitado</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>24</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </log>
+                         
+                    </fields>
+                </moip_transparente_standard>
+                <moip_cc>
+                    <label><![CDATA[Moip Transparente - Cartão de Crédito]]></label>
+                    <frontend_type>text</frontend_type>
+
+                    <sort_order>20000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+
+                         <title_moip_cc translate="label">
+                            <label>Defina as configuações do recebimento por cartão de crédito</label>
+                            <frontend_model>transparente/adminhtml_system_config_form_fieldset_modules_header</frontend_model>
+                            <comment><![CDATA[Se tiver dúvidas, escreva para gente: magento@moip.com.br ]]></comment>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title_moip_cc>
+                        <active translate="label">
+                            <label>Habilitar módulo</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Título exibido no checkout</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                       
+                        <valor_minimo>
+                            <label>Valor Mínimo da Parcela:</label>
+                            
+                            <comment>Não pode ser menor que 5 reais. Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </valor_minimo>
+                        <nummaxparcelamax translate="label">
+                            <label>Número Máximo de Parcelas Permitido</label>
+                           
+                            <comment><![CDATA[O Máximo permitido são 12 parcelas.]]>
+                            </comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </nummaxparcelamax>
+                        
+                         <tipodejuros translate="label">
+                            <label>O juros do parcelamento será Composto?</label>
+                            <comment><![CDATA[O tipo de juros que seu contrato com o moip oferece está disponivel nesse link: <a href="https://www.moip.com.br/AdmMainMenuMyData.do?method=accountdata">Clique aqui</a>.]]>
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </tipodejuros>
+
+                        <title_juros translate="label">
+                            <label>Definição de juros para compras parceladas</label>
+                           
+                            <frontend_model>transparente/adminhtml_system_config_form_fieldset_modules_header</frontend_model>
+                            <comment><![CDATA[O juros que você definir aqui não altera o valor do juros que o Moip irá cobrar de sua transação, essa regra serve para você definir os juros que seu consumidor irá pagar ao comprar parcelado em seu site. Você pode até mesmo assumir o juros total ou parcial para o seu cliente.]]></comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title_juros>
+                        <parcela2 translate="label">
+                            <label>Juros da 2ª parcela:</label>
+                           
+                            <comment>Use ponto não vírgula.</comment>
+                            <validate>validate-percents required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>17</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parcela2>
+                        
+
+                        <parcela3 translate="label">
+                            <label>Juros da 3ª parcela:</label>
+                            
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>19</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parcela3>
+                       
+                        <parcela4 translate="label">
+                            <label>Juros da 4ª parcela:</label>
+                           
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>21</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parcela4>
+                        
+
+                        <parcela5 translate="label">
+                            <label>Juros da 5ª parcela:</label>
+                          
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>23</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parcela5>
+                       
+
+                        <parcela6 translate="label">
+                            <label>Juros da 6ª parcela:</label>
+                           
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parcela6>
+                        
+
+                        <parcela7 translate="label">
+                            <label>Juros da 7ª parcela:</label>
+                            
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>27</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parcela7>
+                        
+
+                        <parcela8 translate="label">
+                            <label>Juros da 8ª parcela:</label>
+                           
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>29</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parcela8>
+                        
+
+                        <parcela9 translate="label">
+                            <label>Juros da 9ª parcela:</label>
+                           
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>31</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parcela9>
+                        
+
+                        <parcela10 translate="label">
+                            <label>Juros da 10ª parcela:</label>
+                            
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>33</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parcela10>
+                       
+
+                        <parcela11 translate="label">
+                            <label>Juros da 11ª parcela:</label>
+                           
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parcela11>
+                        
+
+                        <parcela12 translate="label">
+                            <label>Juros da 12ª parcela:</label>
+                           
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>37</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parcela12>
+                       
+                       <title_regra_juros translate="label">
+                            <label>Definição Avançadas para Juros</label>
+                           
+                            <frontend_model>transparente/adminhtml_system_config_form_fieldset_modules_header</frontend_model>
+                            <comment><![CDATA[ESTE RECURSO É DESTINADO SOMENTE A QUEM POSSUI REGRAS COMPLEXAS DE PARCELAMENTO. PARA REALIZAR APENAS PARCELAMENTO SEM JUROS CONSULTE O VIDEO: <a href="http://youtu.be/Q2AN_3CARb8">Parcelamento sem juros.</a> OU SE FOR MESMO UTILIZAR O MODO AVANÇADO CONSULTE O GUIA: <a href="http://youtu.be/sUyS_GbU5xU">Parcelamento sem juros com regras complexas.</a>.]]></comment>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title_regra_juros>
+
+                       <parcelas_avancadas translate="label">
+                            <label>Definir parcelamento sem juros de acordo com o valor do pedido?</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>51</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </parcelas_avancadas>
+
+
+                        <condicional_1_sem_juros translate="label">
+                            <label>1ª Regra (pedidos até):</label>
+                            <depends>
+                                <parcelas_avancadas>1</parcelas_avancadas>
+                            </depends>
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-price required-entry</validate>
+                            <sort_order>52</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </condicional_1_sem_juros>
+
+                        <condicional_1_max_parcela translate="label">
+                            <label>Número máximo de parcelas sem juros para a 1ª regra:</label>
+                            <depends>
+                                <parcelas_avancadas>1</parcelas_avancadas>
+                            </depends>
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>53</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </condicional_1_max_parcela>
+
+
+                         <condicional_2_sem_juros translate="label">
+                            <label>2ª Regra (acima de):</label>
+                            <depends>
+                                <parcelas_avancadas>1</parcelas_avancadas>
+                            </depends>
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-price required-entry</validate>
+                            <sort_order>54</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </condicional_2_sem_juros>
+
+                         <condicional_2_max_parcela translate="label">
+                            <label>Número máximo de parcelas sem juros para a 2ª regra:</label>
+                            <depends>
+                                <parcelas_avancadas>1</parcelas_avancadas>
+                            </depends>
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </condicional_2_max_parcela>
+
+
+                         <condicional_3_sem_juros translate="label">
+                            <label>3ª Regra (pedidos acima de):</label>
+                            <depends>
+                                <parcelas_avancadas>1</parcelas_avancadas>
+                            </depends>
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-price required-entry</validate>
+                            <sort_order>56</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </condicional_3_sem_juros>
+                        
+                         <condicional_3_max_parcela translate="label">
+                            <label>Número máximo de parcelas sem juros para a 3ª regra:</label>
+                            <depends>
+                                <parcelas_avancadas>1</parcelas_avancadas>
+                            </depends>
+                            <comment>Use ponto não vírgula.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-percents required-entry</validate>
+                            <sort_order>57</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </condicional_3_max_parcela>
+                        <title_regra_magento translate="label">
+                            <label>Definição regras convencionais do Magento</label>
+                           
+                            <frontend_model>transparente/adminhtml_system_config_form_fieldset_modules_header</frontend_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title_regra_magento>
+                       
+
+                         <min_order_total translate="label">
+                            <label>Minimum Order Total</label>
+                            <comment>O Moip não irá processar pagamentos abaixo de R$ 5.00</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>61</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </min_order_total>
+                        <max_order_total translate="label">
+                            <label>Maximum Order Total</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>62</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </max_order_total>
+                        <allowspecific translate="label">
+                            <label>Pagamento a partir de países aplicáveis</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>68</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Countries Payment Applicable From</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>69</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <depends>
+                                <allowspecific>1</allowspecific>
+                            </depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </specificcountry>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sort_order>
+                    </fields>
+                </moip_cc>
+                <moip_boleto>
+                    <label><![CDATA[Moip Transparente - Boleto]]></label>
+                    <frontend_type>text</frontend_type>
+                    <comment><![CDATA[Definas as configurações para o recebimento por boleto]]></comment>
+                    <sort_order>30000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Habilitar módulo</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Título exibido no checkout</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <vcmentoboleto translate="label">
+                            <label>Vencimento da transação:</label>
+                            <comment><![CDATA[Aqui você informar número de  dias de um pagamento.]]>
+                            </comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </vcmentoboleto>
+                        <title_regra_magento translate="label">
+                            <label>Definição regras convencionais do Magento</label>
+                           
+                            <frontend_model>transparente/adminhtml_system_config_form_fieldset_modules_header</frontend_model>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title_regra_magento>
+                         <min_order_total translate="label">
+                            <label>Minimum Order Total</label>
+                            <comment>O Moip não irá processar pagamentos abaixo de R$ 5.00</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </min_order_total>
+                        <max_order_total translate="label">
+                            <label>Maximum Order Total</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>111</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </max_order_total>
+                        <allowspecific translate="label">
+                            <label>Pagamento a partir de países aplicáveis</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <sort_order>171</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Pagamento a partir de determinados países</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>172</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </specificcountry>
+                        <sort_order>
+                           <label>Order de exibição no checkout:</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>172</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                    </fields>
+                </moip_boleto>
+               
+                <moip_tef>
+                    <label><![CDATA[Moip Transparente - Transferência Bancária]]></label>
+                    <frontend_type>text</frontend_type>
+                    <comment><![CDATA[Definas as configurações para o recebimento por transferência]]></comment>
+                    <sort_order>40000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Habilitar módulo</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Título exibido no checkout</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <vcmentotef translate="label">
+                            <label>Vencimento da transação:</label>
+                            <comment>
+                                <![CDATA[Dias em que o cliente pode realizar o pagamento.]]>
+                            </comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </vcmentotef>
+                        <title_regra_magento translate="label">
+                            <label>Definição regras convencionais do Magento</label>
+                           
+                            <frontend_model>transparente/adminhtml_system_config_form_fieldset_modules_header</frontend_model>
+                            <sort_order>90</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title_regra_magento>
+                         <min_order_total translate="label">
+                            <label>Minimum Order Total</label>
+                            <comment>O Moip não irá processar pagamentos abaixo de R$ 5.00</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>110</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </min_order_total>
+                        <max_order_total translate="label">
+                            <label>Maximum Order Total</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>111</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </max_order_total>
+                        <allowspecific translate="label">
+                            <label>Pagamento a partir de países aplicáveis</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <sort_order>171</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Pagamento a partir de determinados países</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>172</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </specificcountry>
+                        <sort_order>
+                           <label>Order de exibição no checkout:</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>172</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                    </fields>
+                </moip_tef>
+                <moip_recurring>
+                      <label><![CDATA[Moip Assinaturas - Configuração Inicial]]></label>
+                    <frontend_type>text</frontend_type>
+                    <comment><![CDATA[Definas as configurações para o recebimento pelo assinaturas]]></comment>
+                    <sort_order>50000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <order_status translate="label">
+                            <label>Status dos Pedidos Iniciados</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status_new</source_model>
+                            <comment><![CDATA[
+                                        <p>É o primeiro status de todo o pedido, ele signfica que foi recebida a ordem de compra.</p>
+                                        <p>No entanto o pagamento ainda não foi processado ou válidado.</p>
+                                        <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.]]>
+                            </comment>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_status>
+                        <api_id>
+                                <label>API Token</label>
+                                <frontend_type>obscure</frontend_type>
+                                <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                                <sort_order>3</sort_order>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>0</show_in_store>
+                            </api_id>
+                            <api_key>
+                                <label>API Key</label>
+                                <frontend_type>obscure</frontend_type>
+                                <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                                <sort_order>4</sort_order>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>0</show_in_store>
+                            </api_key>
+                    </fields>
+                </moip_recurring>
+                <moip_ccrecurring>
+                    <label><![CDATA[Moip Assinaturas - Cartão de Crédito]]></label>
+                    <frontend_type>text</frontend_type>
+                    <comment><![CDATA[Definas as configurações para o recebimento pelo assinaturas]]></comment>
+                    <sort_order>60000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <order_status translate="label">
+                            <label>Status dos Pedidos Iniciados</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status_new</source_model>
+                            <comment><![CDATA[
+                                        <p>É o primeiro status de todo o pedido, ele signfica que foi recebida a ordem de compra.</p>
+                                        <p>No entanto o pagamento ainda não foi processado ou válidado.</p>
+                                        <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.]]>
+                            </comment>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_status>
+                        <title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </title>
+                        
+                        <order_status_holded_trial translate="label">
+                            <label>Status pedido em Trial</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>MOIP_Transparente_Model_Source_Holded</source_model>
+                            <comment><![CDATA[
+                                        <p>Saiba mais  <a href="https://youtu.be/">no video (ainda não disponível)</a>.</p>
+                                    ]]>
+                            </comment>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_status_holded_trial>
+                     
+                        <allowspecific translate="label">
+                            <label>Pagamento a partir de países aplicáveis</label>
+                            <frontend_type>allowspecific</frontend_type>
+                            <sort_order>171</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Pagamento a partir de determinados países</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>172</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </specificcountry>
+                        <sort_order>
+                           <label>Order de exibição no checkout:</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>172</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sort_order>
+                    </fields>
+                </moip_ccrecurring>
+
+                <moip_boletorecurring>
+                    <label><![CDATA[Moip Assinaturas - Boleto Recorrente]]></label>
+                    <frontend_type>text</frontend_type>
+                    <comment><![CDATA[Definas as configurações para o recebimento pelo assinaturas]]></comment>
+                    <sort_order>70000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <order_status translate="label">
+                            <label>Status dos Pedidos Iniciados</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_order_status_new</source_model>
+                            <comment><![CDATA[
+                                        <p>É o primeiro status de todo o pedido, ele signfica que foi recebida a ordem de compra.</p>
+                                        <p>No entanto o pagamento ainda não foi processado ou válidado.</p>
+                                        <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.]]>
+                            </comment>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_status>
+                        <title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </title>
+                        
+                        <order_status_holded_trial translate="label">
+                            <label>Status pedido em Trial</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>MOIP_Transparente_Model_Source_Holded</source_model>
+                            <comment><![CDATA[
+                                        <p>Saiba mais  <a href="https://youtu.be/">no video (ainda não disponível)</a>.</p>
+                                    ]]>
+                            </comment>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_status_holded_trial>
+                       
+                        <allowspecific translate="label">
+                            <label>Pagamento a partir de países aplicáveis</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>68</sort_order>
+                            <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </allowspecific>
+                        <specificcountry translate="label">
+                            <label>Countries Payment Applicable From</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>69</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <depends>
+                                <allowspecific>1</allowspecific>
+                            </depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </specificcountry>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sort_order>
+                    </fields>
+                </moip_boletorecurring>
+
+            </groups>
+        </payment>
+        <moipall translate="label" module="moipall">
+            <label><![CDATA[ <div style="height: 33px; "><img src="http://imagem.O2TI.com/transparente_moip.png" style="float:left; "/><div style="padding-top:8px;color:#2f3850">Moip Avançado!<sup style="float: right;">API V2</sup></div></div>]]></label>
+            <tab>moip</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>200</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <config translate="label">
+                    <label>Funcionamento básico</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable_jquery>
+                            <label>Habilitar jquery dos módulos?</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Se sua loja já possuí o jquery sendo chamado desabilite a nova chamada.</comment>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_jquery>
+                        <enable_bootstrap>
+                            <label>Usar Bootstrap.js do módulo?</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Se sua loja é feita com tema bootstrap marque não.</comment>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_bootstrap>
+                        
+                    </fields>
+                </config>
+                <success_page translate="label">
+                    <label>Página de Sucesso</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>4</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <outros_funil translate="label">
+                            <label>Tags e banners na página de sucesso</label>
+                            <comment><![CDATA[<br /><div class="custom-options"><div class="box" style="width:243px;">
+                                  <p>Você pode colar outros scripts de acompanhamento por aqui.</p>
+                                  <p>Será aceito apenas script de html ou js. não use códigos em php.</p>
+                              </div></div>]]></comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </outros_funil>
+                    </fields>
+                </success_page>
+                <advanced_reset translate="label">
+                    <label>Informações da configuração atual</label>
+                    <frontend_model>MOIP_Transparente_Block_Adminhtml_System_Config_Form_Fieldset_Modules_Reset</frontend_model>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                </advanced_reset>
+               
+                <mktplacet_config>
+                    <label>Split - Divisão de valores</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>7</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                         <enable_split>
+                            <label>Habilitar recurso de split?</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>O Split permite no ato compra enviar valores a um terceiro</comment>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_split>
+                        <mpa translate="label">
+                            <label>MPA Primário</label>
+                            <comment>MPA é o ID da conta moip.</comment>
+                            <depends>
+                                <enable_split>1</enable_split>
+                            </depends>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </mpa>
+                        <split_type>
+                            <label>Tipo de Split</label>
+                            <tooltip><![CDATA[Para o calculo de split, por padrão há a configuração para pegar o atributo de um produto, pegar um atributo fixado nessa sessão ou ainda customizar o modelo de split, essa ultima versão é ideal para quem utilizar módulos adcionais de mktplace.]]>
+                            </tooltip>
+                            <comment><![CDATA[Escolha o tipo do método de consulta do split.]]></comment>
+                            <depends>
+                                <enable_split>1</enable_split>
+                            </depends>
+                            <frontend_type>select</frontend_type>
+                            <source_model>MOIP_Transparente_Model_Source_SplitType</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </split_type>
+                        <mpa_forprod>
+                            <label>Atributo de produto relacionado ao MPA</label>
+                            <tooltip><![CDATA[Escolha o atributo que usará para relacionar o seu produto a conta moip do vendedor secundário.]]>
+                            </tooltip>
+                            <comment><![CDATA[Escolha o atributo que usará para relacionar ao vendedor.
+                                MPA é o ID da conta moip de quem receberá o % da venda.
+                                O vendedor já tem que ter pre-autorizado o módulo "Magento-Moip", caso necessário <a href="https://connect.moip.com.br/oauth/authorize?response_type=code&client_id=APP-AKYBMMVU1FL1&redirect_uri=http://moip.o2ti.com/magento/redirect/?client_id=http%3A%2F%2Fmoip.o2ti.com%2Fmagento%2Fredirect%2FgetMPA.php&scope=RECEIVE_FUNDS,REFUND,MANAGE_ACCOUNT_INFO,DEFINE_PREFERENCES,RETRIEVE_FINANCIAL_INFO">clique aqui</a>]]>
+
+                                </comment>
+                            <depends>
+                                <enable_split>1</enable_split>
+                                <split_type>attributeproduct</split_type>
+                            </depends>
+                            <frontend_type>select</frontend_type>
+                            <source_model>MOIP_Transparente_Model_Source_AttributesProduct</source_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </mpa_forprod>
+                        <value_forprod>
+                            <label>Atributo de produto relacionado ao % da comissão.</label>
+                            <tooltip><![CDATA[Escolha o atributo que será usado para o cálculo para o percentual a ser deduzido da venda do produto.]]>
+                            </tooltip>
+                            <comment><![CDATA[Escolha o atributo que usará para cálculo da comissão.]]></comment>
+                            <depends>
+                                <enable_split>1</enable_split>
+                                <split_type>attributeproduct</split_type>
+                            </depends>
+                            <frontend_type>select</frontend_type>
+                            <source_model>MOIP_Transparente_Model_Source_AttributesProduct</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </value_forprod>
+                        <mpa_store translate="label">
+                            <label>MPA Secundário</label>
+                            <comment><![CDATA[MPA é o ID da conta moip de quem receberá o % da venda.
+                                O vendedor já tem que ter pre-autorizado o módulo "Magento-Moip", caso necessário <a href="https://connect.moip.com.br/oauth/authorize?response_type=code&client_id=APP-AKYBMMVU1FL1&redirect_uri=http://moip.o2ti.com/magento/redirect/?client_id=http%3A%2F%2Fmoip.o2ti.com%2Fmagento%2Fredirect%2FgetMPA.php&scope=RECEIVE_FUNDS,REFUND,MANAGE_ACCOUNT_INFO,DEFINE_PREFERENCES,RETRIEVE_FINANCIAL_INFO">clique aqui</a>]]></comment>
+                            <depends>
+                                <enable_split>1</enable_split>
+                                <split_type>perstoreview</split_type>
+                            </depends>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </mpa_store>
+                        <value_store translate="label">
+                            <label>Percentual da comissão</label>
+                            <comment>É o valor a ser deduzido da venda no produto em percentual</comment>
+                            <depends>
+                                <enable_split>1</enable_split>
+                                <split_type>perstoreview</split_type>
+                            </depends>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </value_store>
+                   </fields>
+                </mktplacet_config>
+            </groups>
+        </moipall>
+    </sections>
+</config>

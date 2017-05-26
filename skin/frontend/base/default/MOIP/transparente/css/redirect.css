@@ -1,0 +1,50 @@
+.action-payment-secundary {
+    margin: 15px 0px;
+}
+img.img-thumbnail {
+    float: left;
+    margin-right: 10px;
+}
+span.line-address {
+    float: left;
+    clear: both;
+}
+span.h4.address-title {
+    float: left;
+    width: 100%;
+    margin: 0;
+}
+span.line-address {
+    float: left;
+    clear: both;
+    width: 100%;
+}
+#multiship-addresses-table, #checkout-review-table {
+    display: table;
+}
+.data-table tfoot tr.first td {
+    border: 0;
+    padding: 0 10px;
+}
+td.last {
+    text-align: right;
+}
+span.icon-success-page {
+    float: left;
+    width: 100%;
+    text-align: center;
+    font-size: 36px;
+    line-height: 65px;
+}
+.block-content .h3{
+    margin-bottom: 5px;
+    margin-top: 10px !important;
+}
+input#barcode-line {
+    cursor: pointer;
+    background: #fff;
+    text-align: center;
+}
+#info-payment-top {
+    text-align: center;
+}

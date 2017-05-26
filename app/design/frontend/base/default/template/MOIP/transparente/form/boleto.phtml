@@ -1,0 +1,26 @@
+<?php $_code=$this->getMethodCode() ?>
+
+<ul id="payment_form_<?php echo $_code ?>" class="form-list" style="display:none">
+	<div class="method-info-pay col-sm-12">
+
+		<div class="row">
+			<div class="col-xs-2">
+				<div class="icon-large"><span class="glyphicon glyphicon-download" aria-hidden="true"></span></div>
+			</div>
+			<div class="col-xs-10">
+				<div class="row">
+					<div class="title-info-pay">Veja abaixo detalhes sobre</div>
+					<div class="title-info-pay"><strong>pagamentos em boleto</strong> </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-12">
+		<ul class="checkout-info-boleto">
+			<li class="checkout-info-item"><p class="checkout-info-text"><?php echo Mage::helper('transparente')->__('O pagamento é somente à vista <strong>sem parcelamento</strong>') ?></p></li>
+			<li class="checkout-info-item"><p class="checkout-info-text"><?php echo Mage::helper('transparente')->__('O boleto pode ser pago em qualquer <strong>agência bancária, casas lotérica</strong> ou ainda via <strong>internet banking</strong>') ?></p></li>
+			<li class="checkout-info-item"><p class="checkout-info-text"><?php echo Mage::helper('transparente')->__('O boleto vence em %s dias úteis, após a finalização', Mage::getStoreConfig('payment/moip_boleto/vcmentoboleto')) ?>.</p></li>
+			<li class="checkout-info-item"><p class="checkout-info-text"><?php echo Mage::helper('transparente')->__('O boleto <strong>será mostrado na página seguinte</strong> e <strong>enviado para o seu e-mail de cadastro</strong>') ?>.</p></li>
+		</ul>
+	</div>	
+</ul>

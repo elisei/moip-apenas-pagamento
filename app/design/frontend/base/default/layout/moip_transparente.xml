@@ -1,0 +1,223 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	
+	<opc_index_index>
+		<reference name="head">
+			<action method="addJs" ifconfig="moipall/config/enable_jquery"><script>MOIP/core/jquery.js</script></action>
+   	 		<action method="addJs"><script>MOIP/core/jquery_noconflict.js</script></action>
+			<action method="addJs"><script>MOIP/transparente/moip.js</script></action>
+			<action method="addCss"><stylesheet>MOIP/transparente/css/form.css</stylesheet></action>
+		   <block type="core/text" name="moip.cdn">
+		      <action method="setText">
+		          <text>
+		           <![CDATA[
+						
+							<script type="text/javascript" src="https://assets.moip.com.br/v2/moip.min.js"></script>
+						
+					]]>
+		        </text>
+		      </action>
+		   </block>
+		</reference>
+	</opc_index_index>
+	
+    <onepagecheckout_index_index>
+       <reference name="head">
+			<action method="addJs" ifconfig="moipall/config/enable_jquery"><script>MOIP/core/jquery.js</script></action>
+   	 		<action method="addJs"><script>MOIP/core/jquery_noconflict.js</script></action>
+			<action method="addJs"><script>MOIP/transparente/moip.js</script></action>
+			<action method="addCss"><stylesheet>MOIP/transparente/css/form.css</stylesheet></action>
+		   <block type="core/text" name="moip.cdn">
+		      <action method="setText">
+		          <text>
+		           <![CDATA[
+						
+							
+							<script type="text/javascript" src="https://assets.moip.com.br/v2/moip.min.js"></script>
+							<script type="text/javascript">
+								jQuery.noConflict();
+								(function($) {
+									jQuery(document).ready(function(){
+										  
+									 	Validation.creditCartTypes.set('DC', [new RegExp('^3(?:0[0-5]|[68][0-9])[0-9]{11}$'), new RegExp('^[0-9]{3}$'), true]);
+								     	Validation.creditCartTypes.set('EO', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);
+								        Validation.creditCartTypes.set('HI', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);
+								        Validation.creditCartTypes.set('HP', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);
+								   });	
+								})(jQuery);
+							</script>
+					]]>
+		        </text>
+		      </action>
+		   </block>
+		</reference>    
+    </onepagecheckout_index_index>
+    <onestepcheckout_index_index>
+      <reference name="head">
+			<action method="addJs" ifconfig="moipall/config/enable_jquery"><script>MOIP/core/jquery.js</script></action>
+   	 		<action method="addJs"><script>MOIP/core/jquery_noconflict.js</script></action>
+			<action method="addJs"><script>MOIP/transparente/moip.js</script></action>
+			<action method="addCss"><stylesheet>MOIP/transparente/css/form.css</stylesheet></action>
+		   <block type="core/text" name="moip.cdn">
+		      <action method="setText">
+		          <text>
+		          <![CDATA[
+						
+							<script type="text/javascript" src="https://assets.moip.com.br/v2/moip.min.js"></script>
+							<script type="text/javascript">
+								jQuery.noConflict();
+								(function($) {
+									jQuery(document).ready(function(){
+										  
+									 	Validation.creditCartTypes.set('DC', [new RegExp('^3(?:0[0-5]|[68][0-9])[0-9]{11}$'), new RegExp('^[0-9]{3}$'), true]);
+								     	Validation.creditCartTypes.set('EO', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);
+								        Validation.creditCartTypes.set('HI', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);
+								        Validation.creditCartTypes.set('HP', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);
+								   });	
+								})(jQuery);
+							</script>
+						
+					]]>
+		        </text>
+		      </action>
+		   </block>
+		</reference>
+    </onestepcheckout_index_index>
+    <inovarti_onestepcheckout_index_index>
+        <reference name="head">
+			<action method="addJs" ifconfig="moipall/config/enable_jquery"><script>MOIP/core/jquery.js</script></action>
+   	 		<action method="addJs"><script>MOIP/core/jquery_noconflict.js</script></action>
+			<action method="addJs"><script>MOIP/transparente/moip.js</script></action>
+			<action method="addCss"><stylesheet>MOIP/transparente/css/form.css</stylesheet></action>
+		   <block type="core/text" name="moip.cdn">
+		      <action method="setText">
+		          <text>
+		           <![CDATA[
+						
+							
+							<script type="text/javascript" src="https://assets.moip.com.br/v2/moip.min.js"></script>
+							<script type="text/javascript">
+								jQuery.noConflict();
+								(function($) {
+									jQuery(document).ready(function(){
+										  
+									 	Validation.creditCartTypes.set('DC', [new RegExp('^3(?:0[0-5]|[68][0-9])[0-9]{11}$'), new RegExp('^[0-9]{3}$'), true]);
+								     	Validation.creditCartTypes.set('EO', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);
+								        Validation.creditCartTypes.set('HI', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);
+								        Validation.creditCartTypes.set('HP', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);
+								   });	
+								})(jQuery);
+							</script>
+						
+					]]>
+		        </text>
+		      </action>
+		   </block>
+		</reference>
+    </inovarti_onestepcheckout_index_index>
+
+	<checkout_onepage_index>
+		<reference name="head">
+			<action method="addJs" ifconfig="moipall/config/enable_jquery"><script>MOIP/core/jquery.js</script></action>
+   	 		<action method="addJs"><script>MOIP/core/jquery_noconflict.js</script></action>
+			<action method="addJs"><script>MOIP/transparente/moip.js</script></action>
+			<action method="addCss"><stylesheet>MOIP/transparente/css/form.css</stylesheet></action>
+		   <block type="core/text" name="moip.cdn">
+		      <action method="setText">
+		          <text>
+		          <![CDATA[
+						
+							
+							<script type="text/javascript" src="https://assets.moip.com.br/v2/moip.min.js"></script>
+							<script type="text/javascript">
+								jQuery.noConflict();
+								(function($) {
+									jQuery(document).ready(function(){
+										  
+									 	Validation.creditCartTypes.set('DC', [new RegExp('^3(?:0[0-5]|[68][0-9])[0-9]{11}$'), new RegExp('^[0-9]{3}$'), true]);
+								     	Validation.creditCartTypes.set('EO', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);
+								        Validation.creditCartTypes.set('HI', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);
+								        Validation.creditCartTypes.set('HP', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);
+								   });	
+								})(jQuery);
+							</script>
+						
+					]]>
+		        </text>
+		      </action>
+		   </block>
+		</reference>
+	</checkout_onepage_index>
+	
+	<gc_checkout_finish_index>		 
+ 		<reference name="head">		
+ 			<action method="addJs" ifconfig="moipall/config/enable_jquery"><script>MOIP/core/jquery.js</script></action>		
+    	 		<action method="addJs"><script>MOIP/core/jquery_noconflict.js</script></action>		
+ 			<action method="addJs"><script>MOIP/transparente/moip.js</script></action>		
+ 			<action method="addCss"><stylesheet>MOIP/transparente/css/form.css</stylesheet></action>		
+ 		   <block type="core/text" name="moip.cdn">		
+ 		      <action method="setText">		
+ 		          <text>		
+ 		           <![CDATA[		
+ 						<script type="text/javascript" src="https://assets.moip.com.br/integration/moip.min.js"></script>		
+ 						<script type="text/javascript">		
+ 							  	
+ 							 	Validation.creditCartTypes.set('DC', [new RegExp('^3(?:0[0-5]|[68][0-9])[0-9]{11}$'), new RegExp('^[0-9]{3}$'), true]);		
+ 						     	Validation.creditCartTypes.set('EO', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);		
+ 						        Validation.creditCartTypes.set('HI', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);		
+ 						        Validation.creditCartTypes.set('HP', [false, new RegExp('^([0-9]{3}|[0-9]{4})?$'), false]);		
+ 						</script>		
+ 					]]>		
+ 		        </text>		
+ 		      </action>		
+ 		   </block>		
+ 		</reference>		
+ 	</gc_checkout_finish_index>
+
+	
+
+
+  	<sales>
+		<block type="MOIP_Transparente_Block_Standard_Info" name="transparente.info" template="MOIP/transparente/info.phtml"></block>
+	</sales>
+
+   	<customer_account>
+	    <reference name="customer_account_navigation">
+	        <action method="addLink" translate="label" module="transparente"><name>transparente</name><path>transparente/index/Cartoes</path><label>Meus Cartões</label></action>
+	    </reference>
+	</customer_account>
+
+	<transparente_index_cartoes>
+		<reference name="head">
+			<action method="addJs" ifconfig="moipall/config/enable_jquery"><script>MOIP/jquery.js</script></action>
+   	 		<action method="addJs"><script>MOIP/jquery_noconflict.js</script></action>
+   	 		 <action method="addItem"><type>skin_css</type><name>MOIP/transparente/css/cartao_save.css</name></action>
+		</reference>
+		<update handle="customer_account"/>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+		</reference>
+		<reference name="content">
+			<block type="MOIP_Transparente_Block_Standard_CartSave" template="MOIP/transparente/cartoes_my_account.phtml">
+			</block>
+		</reference>
+	</transparente_index_cartoes>
+	
+	
+ 	<checkout_onepage_success translate="label">
+   
+			<reference name="head">
+				 		<action method="addCss"><stylesheet>MOIP/transparente/css/redirect.css</stylesheet></action>
+			</reference>
+            <reference name="checkout.success">
+              	<block type="MOIP_Transparente_Block_Standard_Moip" name="transparente.comum" template="MOIP/transparente/checkout/success/moip.phtml">
+              			<block type="MOIP_Transparente_Block_Standard_Method_Boleto" name="transparente.boleto" template="MOIP/transparente/checkout/success/method/boleto.phtml" />
+              			<block type="MOIP_Transparente_Block_Standard_Method_Cc" name="transparente.cartao" template="MOIP/transparente/checkout/success/method/cartao.phtml" />
+			            <block type="MOIP_Transparente_Block_Standard_Method_Tef" name="transparente.transferencia" template="MOIP/transparente/checkout/success/method/transferencia.phtml" />
+				</block>
+            </reference>
+    </checkout_onepage_success>
+
+
+
+</layout>
