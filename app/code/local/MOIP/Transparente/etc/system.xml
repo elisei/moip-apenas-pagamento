@@ -94,13 +94,26 @@
                             <validate>required-entry</validate>
                             <sort_order>11</sort_order>
                             <show_in_default>1</show_in_default>
-                            
                         </order_status>
-                       
+                        <type_status_init>
+                            <label>Tipo de Status Secundário</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>MOIP_Transparente_Model_Source_TypeState</source_model>
+                            <comment><![CDATA[
+                                        <p>Após recebido o pedido é possível determinar o status secundário entre "Pedidos Segurados" ou como "Pagamentos Pendentes"</p>
+                                        <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.]]>
+                            </comment>
+                            <validate>required-entry</validate>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </type_status_init>
                         <order_status_holded translate="label">
                             <label>Status em Análise</label>
                             <frontend_type>select</frontend_type>
                             <validate>required-entry</validate>
+                            <depends>
+                                <type_status_init>onhold</type_status_init>
+                            </depends>
                             <source_model>MOIP_Transparente_Model_Source_Holded</source_model>
                             <comment><![CDATA[
                                         <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.</p>
@@ -108,13 +121,15 @@
                             </comment>
                             <sort_order>13</sort_order>
                             <show_in_default>1</show_in_default>
-                            
                         </order_status_holded>
                         <order_status_holded_boleto translate="label">
                             <label>Status para Boleto em Aberto</label>
                             <frontend_type>select</frontend_type>
                             <validate>required-entry</validate>
                             <source_model>MOIP_Transparente_Model_Source_Holded</source_model>
+                            <depends>
+                                <type_status_init>onhold</type_status_init>
+                            </depends>
                             <comment><![CDATA[
                                         <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.</p>
                                     ]]>
@@ -128,14 +143,66 @@
                             <frontend_type>select</frontend_type>
                             <validate>required-entry</validate>
                             <source_model>MOIP_Transparente_Model_Source_Holded</source_model>
+                            <depends>
+                                <type_status_init>onhold</type_status_init>
+                            </depends>
                             <comment><![CDATA[
                                         <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.</p>
                                     ]]>
                             </comment>
                             <sort_order>15</sort_order>
                             <show_in_default>1</show_in_default>
-                            
                         </order_status_holded_tef>
+
+
+                        <order_status_pending_payment translate="label">
+                            <label>Status em Análise</label>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <depends>
+                                <type_status_init>pending_payment</type_status_init>
+                            </depends>
+                            <source_model>MOIP_Transparente_Model_Source_PendingPayment</source_model>
+                            <comment><![CDATA[
+                                        <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.</p>
+                                    ]]>
+                            </comment>
+                            <sort_order>13</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </order_status_pending_payment>
+
+
+                        <order_status_pending_payment_boleto translate="label">
+                            <label>Status para Boleto em Aberto</label>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>MOIP_Transparente_Model_Source_PendingPayment</source_model>
+                            <depends>
+                                <type_status_init>pending_payment</type_status_init>
+                            </depends>
+                            <comment><![CDATA[
+                                        <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.</p>
+                                    ]]>
+                            </comment>
+                            <sort_order>14</sort_order>
+                            <show_in_default>1</show_in_default>
+                            
+                        </order_status_pending_payment_boleto>
+                        <order_status_pending_payment_tef translate="label">
+                            <label>Status para Transferência em Aberto</label>
+                            <frontend_type>select</frontend_type>
+                            <validate>required-entry</validate>
+                            <source_model>MOIP_Transparente_Model_Source_PendingPayment</source_model>
+                            <depends>
+                                <type_status_init>pending_payment</type_status_init>
+                            </depends>
+                            <comment><![CDATA[
+                                        <p>Saiba mais  <a href="https://youtu.be/qs9EBHFBptU">no video</a>.</p>
+                                    ]]>
+                            </comment>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </order_status_pending_payment_tef>
                         
                         <title_config_mage translate="label">
                             <label>Demais configurações</label>
@@ -1017,6 +1084,16 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </outros_funil>
+                        <detalis>
+                            <label>Exibir detalhes do pedido?</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Mostrar na página de sucesso os detalhes do pedido realizado?</comment>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </detalis>
                     </fields>
                 </success_page>
                 <advanced_reset translate="label">
@@ -1027,7 +1104,56 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                 </advanced_reset>
-               
+                <oneclick_config>
+                    <label>Compra com 1 Click</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>6</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                         <enable_oneclick>
+                            <label>Habilitar compra com 1 clique?</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>A compra com 1 clique está disponível na página de produto.</comment>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_oneclick>
+                        <enable_jquery>
+                            <label>Usar Jquery?</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Define a chamada ou não do jquery.js na página de produto.</comment>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_jquery>
+                        <enable_noconflit>
+                            <label>Usar NoConflit jQuery?</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Função nativa do jQuery que evita conflitos de js.</comment>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_noconflit>
+                        <enable_bootstrap>
+                            <label>Usar Bootstrap?</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>Chamar biblioteca do bootstrap.</comment>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_bootstrap>
+                    </fields>
+                </oneclick_config>
                 <mktplacet_config>
                     <label>Split - Divisão de valores</label>
                     <frontend_type>text</frontend_type>
