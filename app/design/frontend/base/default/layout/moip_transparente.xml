@@ -1,6 +1,43 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-	
+	<!-- idecheckoutvm_index_index -->
+	<firecheckout_index_index translate="label">
+		<reference name="head">
+			<action method="addJs" ifconfig="moipall/config/enable_jquery"><script>MOIP/core/jquery.js</script></action>
+   	 		<action method="addJs"><script>MOIP/core/jquery_noconflict.js</script></action>
+			<action method="addJs"><script>MOIP/transparente/moip.js</script></action>
+			<action method="addCss"><stylesheet>MOIP/transparente/css/form.css</stylesheet></action>
+		   <block type="core/text" name="moip.cdn">
+		      <action method="setText">
+		          <text>
+		           <![CDATA[
+							<script type="text/javascript" src="https://assets.moip.com.br/v2/moip.min.js"></script>
+					]]>
+		        </text>
+		      </action>
+		   </block>
+		</reference>   
+	</firecheckout_index_index>
+	<idecheckoutvm_index_index>
+		<reference name="head">
+			<action method="addJs" ifconfig="moipall/config/enable_jquery"><script>MOIP/core/jquery.js</script></action>
+   	 		<action method="addJs"><script>MOIP/core/jquery_noconflict.js</script></action>
+			<action method="addJs"><script>MOIP/transparente/moip.js</script></action>
+			<action method="addCss"><stylesheet>MOIP/transparente/css/form.css</stylesheet></action>
+		   <block type="core/text" name="moip.cdn">
+		      <action method="setText">
+		          <text>
+		           <![CDATA[
+						
+							<script type="text/javascript" src="https://assets.moip.com.br/v2/moip.min.js"></script>
+						
+					]]>
+		        </text>
+		      </action>
+		   </block>
+		</reference>
+	</idecheckoutvm_index_index>
+
 	<opc_index_index>
 		<reference name="head">
 			<action method="addJs" ifconfig="moipall/config/enable_jquery"><script>MOIP/core/jquery.js</script></action>
@@ -52,6 +89,7 @@
 		   </block>
 		</reference>    
     </onepagecheckout_index_index>
+
     <onestepcheckout_index_index>
       <reference name="head">
 			<action method="addJs" ifconfig="moipall/config/enable_jquery"><script>MOIP/core/jquery.js</script></action>
@@ -83,6 +121,7 @@
 		   </block>
 		</reference>
     </onestepcheckout_index_index>
+    
     <inovarti_onestepcheckout_index_index>
         <reference name="head">
 			<action method="addJs" ifconfig="moipall/config/enable_jquery"><script>MOIP/core/jquery.js</script></action>

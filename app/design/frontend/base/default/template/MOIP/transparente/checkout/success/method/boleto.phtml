@@ -1,4 +1,8 @@
+<h2 class="h2"><?php echo $this->__('Seu pedido foi recebido com <strong>sucesso</strong>'); ?></h2>
+<p><?php echo $this->__('As informações de seu pedido foram encaminhadas para o seu email <strong>%s</strong>.', $this->getOrder()->getCustomerEmail()) ?></p>
 <h3 class="h3"><strong>Faça agora o pagamento do seu boleto</strong></h3>
+
+
 <div class="input-group input-group-lg">
   <input type="text" class="form-control" readonly="disable" id="barcode-line" value="<?php echo $this->getBoletoCode() ?>">
   <span class="input-group-btn">
@@ -10,6 +14,9 @@
             popWin('<?php echo $this->getBoletoLinks().'/print'  ?>', 'imprimir-boleto', 'width=750,height=750,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes'); return false;"><span><span>Visualize o Boleto</span></span>
     </button>
 </div>
+		   
+
+
 <script type="text/javascript">
 	document.getElementById("copy-code").addEventListener("click", function() {
         jQuery("#copy-code").text('Copiado');

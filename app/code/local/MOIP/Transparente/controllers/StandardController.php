@@ -199,7 +199,11 @@ class MOIP_Transparente_StandardController extends Mage_Core_Controller_Front_Ac
 		$invoice->sendEmail();
 		$invoice->setEmailSent(true);
 		$invoice->save();
-		$this->getResponse()->setHeader('HTTP/1.0','200',true);
+		try {
+			$this->getResponse()->setHeader('HTTP/1.0','200',true);
+		} catch (Exception $exception) {
+			$this->getResponse()->setHeader('HTTP/1.0','404',true);
+		}
 	 }
 
 	public function initState($value){
@@ -219,7 +223,11 @@ class MOIP_Transparente_StandardController extends Mage_Core_Controller_Front_Ac
 		$order->setState($state, $status, $comment, $notified = true, $includeComment = true);
 		$order->save();
 		$order->sendOrderUpdateEmail(true, $comment);
-		$this->getResponse()->setHeader('HTTP/1.0','200',true);
+		try {
+			$this->getResponse()->setHeader('HTTP/1.0','200',true);
+		} catch (Exception $exception) {
+			$this->getResponse()->setHeader('HTTP/1.0','404',true);
+		}
 		return;
 	}
 

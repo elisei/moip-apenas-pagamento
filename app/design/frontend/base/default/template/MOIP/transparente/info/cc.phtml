@@ -1,5 +1,9 @@
 <?php if(Mage::app()->getRequest()->getControllerModule() != "Mage_Checkout" && Mage::app()->getRequest()->getActionName() != "progresscheckout"): ?>
-		<?php $info = $this->_prepareInfo(); ?>	
+
+		<?php $info = $this->_prepareInfo(); ?>
+
+
+	
 			<h3 class="h3"><?php echo $info['moip_card_brand']; ?> <?php echo $info['moip_card_installment']; ?> parcelas</h3>
 			<div class="input-value">
 				<div><strong><?php echo $info['moip_card_fullname'] ?></strong></div>
