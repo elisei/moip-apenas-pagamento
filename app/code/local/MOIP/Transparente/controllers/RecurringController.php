@@ -293,7 +293,7 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
                             ->setParentItemId($parent_id_order)
                             ->setSku($item->getSku()) 
                             ->setProductType($item->getProductType())
-                            
+                            ->setProductId($item->getProductId())
                             ->setQtyBackordered($item->getQtyBackordered())
                             ->setTotalQtyOrdered($item->getTotalQtyOrdered())
                             ->setQtyOrdered($item->getQtyOrdered())
