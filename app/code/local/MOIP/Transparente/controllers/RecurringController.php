@@ -39,15 +39,15 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
                 $order_init         = $order_exist->getFirstItem();
                 $orderId            = $order_init->getEntityId();
                 $order_load         = Mage::getModel('sales/order')->load($orderId);
-                $api->generateLog($json_moip, 'MOIP_Webhooks-payment-create.txt');
+                $order_status       = $order_load->getState();
                 if($order_status === Mage_Sales_Model_Order::STATE_NEW && count($order_exist) === 1){
-                    echo "não faço nada pois já tenho as infos do pay";
+                   
                     return $this;
                 } else {
-                    $invoice_id = $decode->resource->invoice_id;
+                    
                     $new_order      = $this->createNewOrderRecurring($code_id, $order_load, $data_for_payment["resource"]);
-                    echo "crio a ordem com todas as lindas infos! setando o invoice_id para o id de correspondencias (para o update) :)";
-                    echo $invoice_id;
+                    
+                    echo $new_order->getIncrementId();
                 }
             }
 
@@ -58,7 +58,7 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
                 
                 $code_id             = $decode->resource->subscription_code;
                 $order_trans_status  = $decode->resource->status->description;
-                $invoice_id          = $decode->resource->id;
+                $id                  = $decode->resource->id;
                 if($order_trans_status == "Autorizado"){
                     $order_exist    = $this->consultOrdersExist($code_id);
 
@@ -66,19 +66,44 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
                     $orderId        = $order_init->getEntityId();
                     $order_load     = Mage::getModel('sales/order')->load($orderId);
                     $order_status   = $order_load->getState();
-                   # var_dump($order_status);die();
+                   
                     if($order_status === Mage_Sales_Model_Order::STATE_NEW && count($order_exist) === 1){
                         $this->autorizaPagamento($order_load);
+                        $this->setProfileState($code_id, "Autorizado");
                        
                     } else {
-                      $order_transaction = $this->consultTransactionId($invoice_id);
+                      $order_transaction = $this->consultTransactionId($id);
                       if($order_transaction['order_id']){
                         $order    = Mage::getModel('sales/order')->load($order_transaction['order_id']);
                         $this->autorizaPagamento($order);
+                        $this->setProfileState($code_id, "Autorizado");
                       }
                       
                     }
                   
+                } elseif($order_trans_status == "Cancelado") {
+                    $order_exist    = $this->consultOrdersExist($code_id);
+
+                    $order_init     = $order_exist->getFirstItem();
+                    $orderId        = $order_init->getEntityId();
+                    $order_load     = Mage::getModel('sales/order')->load($orderId);
+                    $order_status   = $order_load->getState();
+                   
+                    if($order_status === Mage_Sales_Model_Order::STATE_NEW && count($order_exist) === 1){
+                        $this->cancelaPagamento($order_load);
+                        $this->setProfileState($code_id, "Cancelado");
+                       
+                    } else {
+                      $order_transaction = $this->consultTransactionId($id);
+                      if($order_transaction['order_id']){
+                        $order    = Mage::getModel('sales/order')->load($order_transaction['order_id']);
+                        $this->cancelaPagamento($order);
+                        $this->setProfileState($code_id, "Cancelado");
+                      }
+                      
+                    }
+
+
                 } else {
                    echo "Não lerei essa info";
                    return; 
@@ -92,6 +117,7 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
 
         }
     }
+
     public function consultOrdersExist($code_id){
         $profile            = Mage::getModel('sales/recurring_profile')->load($code_id);
         $customer_id        = $profile->getCustomerId();
@@ -128,7 +154,7 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
 
         $new_order = Mage::getModel('sales/order')
                // ->setIncrementId($order->getIncrementId().'-1')
-                ->setState(Mage_Sales_Model_Order::STATE_NEW)
+               
                 ->setIncrementId($reservedOrderId)
                 ->setStoreId($storeId)
                 ->setQuoteId(0)
@@ -172,7 +198,7 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
                             ->setStoreId($storeId)
                             ->setAddressType(Mage_Sales_Model_Quote_Address::TYPE_SHIPPING)
                             ->setCustomerId($customer->getId())
-                            ->setCustomerAddressId(1)
+                            ->setCustomerAddressId($customer->getDefaultShippingAddress())
                             ->setPrefix($shipping->getPrefix())
                             ->setFirstname($shipping->getFirstname())
                             ->setMiddlename($shipping->getMiddlename())
@@ -225,7 +251,7 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
         
         $transaction = Mage::getModel('sales/order_payment_transaction');
         $transaction->setOrderId($new_order->getId());
-        $transaction->setTxnId($data_for_payment["invoice_id"]);
+        $transaction->setTxnId($data_for_payment["id"]);
         $transaction->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE);
         $transaction->setPaymentId($new_order->getPayment()->getId());
         $transaction->setAdditionalInformation(
@@ -236,15 +262,12 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
         $transaction->setOrderPaymentObject($new_order->getPayment());
         $transaction->setIsClosed(1);
         $transaction->save();
-
+        $new_order->setState(Mage_Sales_Model_Order::STATE_NEW)->save();
        return $new_order;
     }
 
-    public function createTrans($order, $id, $infos){
-            
-    }
     
-   public function isBundle($order){
+    public function isBundle($order){
         foreach($order->getAllItems() as $item) {
             $load_parent         = Mage::getModel('sales/order_item')->load($item->getId());
             $parent_product_type = $load_parent->getProductType();
@@ -307,43 +330,60 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
         return $orderItem;
     }
     
-    public function setStatesRecurring($order, $status_moip)
-    {
-        
+    public function setProfileState($id_profile, $state){
+
+        if($state === "Cancelado"){
+            $state_profile      = Mage_Sales_Model_Recurring_Profile::STATE_PENDING;
+        } elseif($state === "Autorizado"){
+            $state_profile      = Mage_Sales_Model_Recurring_Profile::STATE_ACTIVE;
+        }
+
+        $profile                = Mage::getModel('sales/recurring_profile')->load($id_profile);
+        $profile->setState($state_profile)->save();
+        return $this;
     }
     
     
-    public function autorizaPagamento($order)
-    {
+    public function set404(){
+        $this->getResponse()->setHeader('HTTP/1.1','404 Not Found');
+        $this->getResponse()->setHeader('Status','404 File not found');
+
+        $pageId = Mage::getStoreConfig(Mage_Cms_Helper_Page::XML_PATH_NO_ROUTE_PAGE);
+        if (!Mage::helper('cms/page')->renderPage($this, $pageId)) {
+            $this->_forward('defaultNoRoute');
+        }
+    }
+
+    public function autorizaPagamento($order){
         if($order->canUnhold()) {
             $order->unhold()->save();
         } 
         $invoice = $order->prepareInvoice();
+       
         $invoice->register()->capture();
         
         Mage::getModel('core/resource_transaction')->addObject($invoice)->addObject($invoice->getOrder())->save();
         $invoice->sendEmail();
         $invoice->setEmailSent(true);
-        $invoice->save();   
-    }
-    
-    public function iniciaPagamento($order, $onhold)
-    {
-        
-    }
-
-     public function iniciaPagamentoEspecial($order, $onhold)
-    {
-        
-    }
-    
-    public function cancelaPagamento($order)
-    {
-       
-    }
-    
-    public function updateInOrder($order, $state, $status, $comment){
-      
+        $invoice->save();
+        try {
+            return $order;
+        } catch (Exception $exception) {
+            return $this->set404();
+        }
      }
-    
+
+    public function cancelaPagamento($order){
+        if($order->canUnhold()) {
+            $order->unhold()->save();
+        } 
+        $order->cancel()->save();
+        
+        try {
+            return $order;
+        } catch (Exception $exception) {
+            return $this->set404();
+        }
+        
+    }
 }   
