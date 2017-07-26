@@ -175,7 +175,7 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
                             ->setStoreId($storeId)
                             ->setAddressType(Mage_Sales_Model_Quote_Address::TYPE_BILLING)
                             ->setCustomerId($customer->getId())
-                            ->setCustomerAddressId($customer->getDefaultBilling())
+                            ->setCustomerAddressId($customer->getDefaultBilling()->getId())
                             ->setPrefix($address->getPrefix())
                             ->setFirstname($address->getFirstname())
                             ->setMiddlename($address->getMiddlename())
@@ -198,7 +198,7 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
                             ->setStoreId($storeId)
                             ->setAddressType(Mage_Sales_Model_Quote_Address::TYPE_SHIPPING)
                             ->setCustomerId($customer->getId())
-                            ->setCustomerAddressId($customer->getDefaultShippingAddress())
+                            ->setCustomerAddressId($customer->getDefaultShippingAddress()->getId())
                             ->setPrefix($shipping->getPrefix())
                             ->setFirstname($shipping->getFirstname())
                             ->setMiddlename($shipping->getMiddlename())
@@ -238,7 +238,7 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
             ->setBaseShippingAmount($order->getBaseShippingAmount())
             ->setShippingAmount($order->getShippingAmount())
             ->setBaseGrandTotal($order->getBaseGrandTotal())
-            ->setBaseDiscountAmount($order->setBaseDiscountAmount())
+            ->setBaseDiscountAmount($order->getBaseDiscountAmount())
             ->setDiscountAmount($order->getDiscountAmount())->save();
 
         $new_order_id = $new_order->getId();
