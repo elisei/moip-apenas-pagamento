@@ -47,24 +47,26 @@ class MOIP_Transparente_StandardController extends Mage_Core_Controller_Front_Ac
 		ini_set("display_errors",1);
 		
 		$api 			= $this->getApi();
-		$body 			= $this->getRequest()->getRawBody();
+		
 		$params 		= $this->getRequest()->getParams();
 		$json_moip 		= $this->getRequest()->getRawBody();
-        $autorization 	= $this->getRequest()->getHeader('Authorization');   
+        $autorization 	= $this->getRequest()->getHeader('Authorization');  
+
         $api->generateLog("successAction: ".$json_moip, 'MOIP_WebHooks.log');
+
+
 		if(!$this->getRequest()->getRawBody()){
 			$api->generateLog("Não foi possiviel ler o body", 'MOIP_WebHooksError.log');
 			return $this->set404();
 		}
+
+
 		if($params['validacao'] == $this->getStandard()->getConfigData('validador_retorno')){
-		
 			$json_moip = json_decode($json_moip);
 			return $this->getTransationMoip($json_moip);
-		}
-		else {
+		} else {
 			$api->generateLog("Sem validaçao: ".$params, 'MOIP_WebHooksError.log');
-			$api->generateLog($this->getStandard()->getConfigData('validador_retorno'), 'MOIP_WebHooksError.log');
-			$api->generateLog("Json: ".$json_moip, 'MOIP_WebHooksError.log');
+			$api->generateLog("Sem validaçao esperada: ".$this->getStandard()->getConfigData('validador_retorno'), 'MOIP_WebHooksError.log');
 			return $this->set404();
 			
 		}
@@ -98,19 +100,23 @@ class MOIP_Transparente_StandardController extends Mage_Core_Controller_Front_Ac
 		
 		
 		$result_table 	= $this->findOrderMage($moip_order);
+
 		$api->generateLog($result_table->getData(), 'MOIP_WebHooks.log');
+		
+
 		if(!$result_table){
 			$api->generateLog("Sem resultado na tabela moip: ".$json_moip, 'MOIP_WebHooksError.log');
 			return $this->set404();
 		}
+
+
 		$mage_order 	= $result_table->getMagePay();
 		$method 		= $result_table->getFormaPagamento();
-		$api->generateLog($mage_order, 'MOIP_WebHooks.log');
-		$api->generateLog($method, 'MOIP_WebHooks.log');
+
+
 		if($method == "moip_boleto"){
 			$details_cancel 	= "Prazo para pagamento excedido";
-		} 
-		elseif ($method == "moip_cc"){
+		} elseif ($method == "moip_cc"){
 			if(isset($json_moip->resource->payment->cancellationDetails)){
 				$details_cancel 	= $json_moip->resource->payment->cancellationDetails->description;	
 			} else{
@@ -120,7 +126,7 @@ class MOIP_Transparente_StandardController extends Mage_Core_Controller_Front_Ac
 		} elseif($method == "moip_tef"){
 			$details_cancel 	= "Prazo para pagamento excedido";
 		} else {
-			$api->generateLog("Metodo de pagamento inexistente: ".$json_moip, 'MOIP_WebHooksError.log');
+			$api->generateLog("Metodo de pagamento inexistente: ".$method, 'MOIP_WebHooksError.log');
 			return $this->set404();
 		}
 		
@@ -128,46 +134,60 @@ class MOIP_Transparente_StandardController extends Mage_Core_Controller_Front_Ac
 
 		if($order->getId()){
 
-			$order_status_init 	= $order->getState();
+			$order_state 	= $order->getState();
 			
-			if($order_status_init == Mage_Sales_Model_Order::STATE_NEW){
-				sleep(1);
-				$order_status 	= $order->getState();
-				$api->generateLog("Atualizar pedido: ".$order->getIncrementId() ." status ".$order_status, 'MOIP_WebHooks.log');
-				
+			// se o pedido ainda não mudou para o primeiro level de status e se o cliente configurou para aplicar a primeira mudança retornará 404 para aguardar novo fluxo.
+
+
+			if($order_state == Mage_Sales_Model_Order::STATE_NEW &&  $this->initState('type_status_init') !=  "not"){
+				$this->set404();
 			}
-			$api->generateLog("Atualizar pedido: ".$order->getIncrementId() ." status ".$order_status, 'MOIP_WebHooks.log');
-			
-			if($status_moip == "AUTHORIZED" && $order_status != Mage_Sales_Model_Order::STATE_COMPLETE && $order_status != Mage_Sales_Model_Order::STATE_PROCESSING && $order_status != Mage_Sales_Model_Order::STATE_CLOSED){
-				$api->generateLog("Autorizar pedido: ".$order->getIncrementId(), 'MOIP_WebHooks.log');
+
+			if($status_moip == "AUTHORIZED" && $order_state != Mage_Sales_Model_Order::STATE_COMPLETE && $order_state != Mage_Sales_Model_Order::STATE_PROCESSING && $order_state != Mage_Sales_Model_Order::STATE_CLOSED){
+
+				//realiza a autorização
+
 				$upOrder = $this->autorizaPagamento($order);
+
+
+				//verifica se foi aplicada a autorização
 				if($upOrder->getState() == Mage_Sales_Model_Order::STATE_PROCESSING) {
-					$api->generateLog("Pedido alterado para: ".$upOrder->getState(), 'MOIP_WebHooks.log');
-				 	return $upOrder->getIncrementId() . ' alterado para  '.$upOrder->getState();	
-				 } else {
-				 	$api->generateLog("Pedido ".$upOrder->getIncrementId() ." não pode ser alterado para: ".$order->getState(), 'MOIP_WebHooksError.log');
-				 	$this->set404();
-				 }
-			} elseif($status_moip == "CANCELLED" && $order_status != Mage_Sales_Model_Order::STATE_COMPLETE && $order_status != Mage_Sales_Model_Order::STATE_PROCESSING && $order_status != Mage_Sales_Model_Order::STATE_CLOSED && $order_status != Mage_Sales_Model_Order::STATE_CANCELED){
-				 $upOrder = $this->cancelaPagamento($order,$details_cancel);
-				 if($upOrder->getState() == Mage_Sales_Model_Order::STATE_CANCELED) {
-				 	$api->generateLog("Pedido alterado para: ".$upOrder->getState(), 'MOIP_WebHooks.log');
-				 	return $upOrder->getIncrementId() . ' alterado para  '.$upOrder->getState();	
-				 } else {
-				 	$api->generateLog("Pedido ".$upOrder->getIncrementId() ." não pode ser alterado para: ".$upOrder->getState(), 'MOIP_WebHooksError.log');
-				 	$this->set404();
-				 }
+
+					$api->generateLog("Order: ". $upOrder->getIncrementId() . ' alterado para  '.$upOrder->getState(), 'MOIP_WebHooks.log');
+				 	return $upOrder->getIncrementId() . ' alterado para  '.$upOrder->getState();
+
+				} else {
+					$api->generateLog("Order: ". $upOrder->getIncrementId() ." ficou com state ". $upOrder->getState(), 'MOIP_WebHooksError.log');
+				 	return $this->set404();
+				}
+
+
+
+			} elseif($status_moip == "CANCELLED" && $order_state != Mage_Sales_Model_Order::STATE_COMPLETE && $order_state != Mage_Sales_Model_Order::STATE_PROCESSING && $order_state != Mage_Sales_Model_Order::STATE_CLOSED && $order_state != Mage_Sales_Model_Order::STATE_CANCELED){
+
+				//realiza o cancelamento
+				$upOrder = $this->cancelaPagamento($order,$details_cancel);
+
+				//verifica se foi aplicado
+
+				
+				if($upOrder->getState() == Mage_Sales_Model_Order::STATE_CANCELED) {
+
+					$api->generateLog("Order: ". $upOrder->getIncrementId() . ' alterado para  '.$upOrder->getState(), 'MOIP_WebHooks.log');
+				 	return $upOrder->getIncrementId() . ' alterado para  '.$upOrder->getState();
+
+				} else {
+					$api->generateLog("Order: ". $upOrder->getIncrementId() ." ficou com state ". $upOrder->getState(), 'MOIP_WebHooksError.log');
+				 	return $this->set404();
+				}
+
+				
 				 
 			} elseif($status_moip == "REFUNDED"){
 				return $this->refundPagamento($order, $refundToStoreCreditAmount, $comment);
-			} else{
+			} 
 
-				
-				$api->generateLog("Status de pagamento inexistente: ".$json_moip, 'MOIP_WebHooksError.log');
-				$api->generateLog("Status de moip: ".$status_moip, 'MOIP_WebHooksError.log');
-				$api->generateLog($order_status, 'MOIP_WebHooksError.log');
-				return $this->set404();
-			}
+
 		} else {
 			$api->generateLog("Order inexistente: ".$json_moip, 'MOIP_WebHooksError.log');
 			return $this->set404();
