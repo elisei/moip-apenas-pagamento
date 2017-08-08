@@ -25,6 +25,7 @@ class MOIP_Transparente_Model_Api
     {
         return $this->getCheckout()->getQuote();
     }
+
     public function normalizeComissao($comissionados){
 
        $_i = 0;
@@ -406,9 +407,17 @@ class MOIP_Transparente_Model_Api
         );
         $use_split = Mage::getStoreConfig('moipall/mktplacet_config/enable_split');
         if($use_split){
+
+            $split_type = Mage::getStoreConfig('moipall/mktplacet_config/split_type');
             $comissoes = $this->getListaComissoesAvancadas($quote);
-            $normalize = $this->normalizeComissao($comissoes);
-            $array_receivers = array("receivers" => $normalize);
+            if($split_type == "attributeproduct"){
+                $normalize = $this->normalizeComissao($comissoes);
+                $array_receivers = array("receivers" => $normalize);   
+            } else {
+                $array_receivers = array("receivers" => $comissoes);
+            }
+            
+            
             $json_order = array_merge($json_order, $array_receivers);
         }
         $json_order    = Mage::helper('core')->jsonEncode((object) $json_order);
