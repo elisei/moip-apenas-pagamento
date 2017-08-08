@@ -145,6 +145,19 @@ class MOIP_Transparente_Model_Api
                         );
                 }
             }
+        } elseif($split_type == 'fulldirect') {
+            $attribute_mpa          = Mage::getStoreConfig('moipall/mktplacet_config/mpa_store_full');
+    
+           
+                if($attribute_mpa){
+                    $comissionados[]    = array(
+                            'moipAccount' => array('id' => $attribute_mpa),
+                            'type' => "SECONDARY",
+                            'amount' => array('fixed' => number_format($quote->getGrandTotal(), 2, '', '')),
+                            "feePayor" => "true",
+                        );
+                }
+           
         } else{
             // Você pode personalizar seu método de split aqui! :D 
 

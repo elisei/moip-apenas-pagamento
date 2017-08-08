@@ -1245,10 +1245,24 @@
                             </depends>
                             <frontend_type>text</frontend_type>
                             <sort_order>6</sort_order>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </mpa_store>
+                        <mpa_store_full translate="label">
+                            <label>MPA Secundário</label>
+                            <comment><![CDATA[MPA é o ID da conta moip de quem receberá o % da venda.
+                                O vendedor já tem que ter pre-autorizado o módulo "Magento-Moip", caso necessário <a href="https://connect.moip.com.br/oauth/authorize?response_type=code&client_id=APP-AKYBMMVU1FL1&redirect_uri=http://moip.o2ti.com/magento/redirect/?client_id=http%3A%2F%2Fmoip.o2ti.com%2Fmagento%2Fredirect%2FgetMPA.php&scope=RECEIVE_FUNDS,REFUND,MANAGE_ACCOUNT_INFO,DEFINE_PREFERENCES,RETRIEVE_FINANCIAL_INFO">clique aqui</a>]]></comment>
+                            <depends>
+                                <enable_split>1</enable_split>
+                                <split_type>fulldirect</split_type>
+                            </depends>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </mpa_store_full>
                         <value_store translate="label">
                             <label>Percentual da comissão</label>
                             <comment>É o valor a ser deduzido da venda no produto em percentual</comment>
@@ -1258,7 +1272,7 @@
                             </depends>
                             <frontend_type>text</frontend_type>
                             <sort_order>7</sort_order>
-                            <show_in_default>1</show_in_default>
+                            <show_in_default>0</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </value_store>

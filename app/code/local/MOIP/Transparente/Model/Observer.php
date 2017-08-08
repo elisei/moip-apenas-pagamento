@@ -198,13 +198,13 @@ class Moip_Transparente_Model_Observer
             $orders->addFieldToFilter('created_at', array('gteq' => $from_date))
                          ->addFieldToFilter('created_at', array('lteq' => $to_date))
                          ->addAttributeToFilter('state',  array(
-                                                                                'nin' => array(
-                                                                                                    Mage_Sales_Model_Order::STATE_COMPLETE,
-                                                                                                    Mage_Sales_Model_Order::STATE_PROCESSING,
-                                                                                                    Mage_Sales_Model_Order::STATE_CLOSED,
-                                                                                                    Mage_Sales_Model_Order::STATE_CANCELED
-                                                                                                )
+                                                                'nin' => array(
+                                                                                    Mage_Sales_Model_Order::STATE_COMPLETE,
+                                                                                    Mage_Sales_Model_Order::STATE_PROCESSING,
+                                                                                    Mage_Sales_Model_Order::STATE_CLOSED,
+                                                                                    Mage_Sales_Model_Order::STATE_CANCELED
                                                                                 )
+                                                                )
                                                                 
                                                 )
                          ->addAttributeToFilter('payment.method', array(array('eq' => 'moip_cc'), array('eq' => 'moip_boleto'), array('eq' => 'moip_tef')));
@@ -299,13 +299,13 @@ class Moip_Transparente_Model_Observer
             $orders->addFieldToFilter('created_at', array('gteq' => $from_date))
                          ->addFieldToFilter('created_at', array('lteq' => $to_date))
                          ->addAttributeToFilter('state',  array(
-                                                                                'nin' => array(
-                                                                                                    Mage_Sales_Model_Order::STATE_COMPLETE,
-                                                                                                    Mage_Sales_Model_Order::STATE_PROCESSING,
-                                                                                                    Mage_Sales_Model_Order::STATE_CLOSED,
-                                                                                                    Mage_Sales_Model_Order::STATE_CANCELED
-                                                                                                )
+                                                                'nin' => array(
+                                                                                    Mage_Sales_Model_Order::STATE_COMPLETE,
+                                                                                    Mage_Sales_Model_Order::STATE_PROCESSING,
+                                                                                    Mage_Sales_Model_Order::STATE_CLOSED,
+                                                                                    Mage_Sales_Model_Order::STATE_CANCELED
                                                                                 )
+                                                                )
                                                                 
                                                 )
                          ->addAttributeToFilter('payment.method', array(array('eq' => 'moip_boleto')));
