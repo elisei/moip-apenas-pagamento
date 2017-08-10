@@ -41,13 +41,24 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
                 $order_load         = Mage::getModel('sales/order')->load($orderId);
                 $order_status       = $order_load->getState();
                 if($order_status === Mage_Sales_Model_Order::STATE_NEW && count($order_exist) === 1){
-                   
+                    $order_trans_status  = $decode->resource->status->description;
+                    if($order_trans_status == "Cancelado"){
+                        $this->cancelaPagamento($order_load);
+                        $this->setProfileState($code_id, "Cancelado"); 
+                    } elseif ($order_trans_status == "Autorizado") {
+                        $this->autorizaPagamento($order_load);
+                         $this->setProfileState($code_id, "Autorizado");
+                    }
+                    
                     return $this;
                 } else {
                     
                     $new_order      = $this->createNewOrderRecurring($code_id, $order_load, $data_for_payment["resource"]);
-                    
+                    $order_trans_status  = $decode->resource->status->description;
+                    echo $order_trans_status;
+                    $this->cancelaPagamento($new_order);
                     echo $new_order->getIncrementId();
+                    echo " ".$new_order->getState();
                 }
             }
 
@@ -175,7 +186,7 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
                             ->setStoreId($storeId)
                             ->setAddressType(Mage_Sales_Model_Quote_Address::TYPE_BILLING)
                             ->setCustomerId($customer->getId())
-                            ->setCustomerAddressId($customer->getDefaultBilling()->getId())
+                            ->setCustomerAddressId($customer->getDefaultBilling())
                             ->setPrefix($address->getPrefix())
                             ->setFirstname($address->getFirstname())
                             ->setMiddlename($address->getMiddlename())
@@ -198,7 +209,7 @@ class MOIP_Transparente_RecurringController extends Mage_Core_Controller_Front_A
                             ->setStoreId($storeId)
                             ->setAddressType(Mage_Sales_Model_Quote_Address::TYPE_SHIPPING)
                             ->setCustomerId($customer->getId())
-                            ->setCustomerAddressId($customer->getDefaultShippingAddress()->getId())
+                            ->setCustomerAddressId($customer->getDefaultShipping())
                             ->setPrefix($shipping->getPrefix())
                             ->setFirstname($shipping->getFirstname())
                             ->setMiddlename($shipping->getMiddlename())
