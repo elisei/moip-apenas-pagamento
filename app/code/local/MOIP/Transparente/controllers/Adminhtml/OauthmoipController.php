@@ -113,10 +113,10 @@ class MOIP_Transparente_Adminhtml_OauthmoipController extends  Mage_Adminhtml_Co
 		$json_log = json_encode($data);
 		$api->generateLog($json_log, 'MOIP_Oauth.log');
 		
-			$store_id = $data['store_id'];
+			$store_id = $data['key'];
 
-			if($data['store_id']){
-				$store_code = $data['store_id'];
+			if($data['key']){
+				$store_code = $data['key'];
 			} else {
 				$store_code = 'default';
 			}
