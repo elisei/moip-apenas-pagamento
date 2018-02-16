@@ -160,10 +160,11 @@ class MOIP_Transparente_Model_Api
                 }
            
         } else{
-            // Você pode personalizar seu método de split aqui! :D 
-
+            // Você pode personalizar seu método de split aqui! :D
+            $splitdata = new Varien_Object(array('quote' => $quote, 'comissionados' => $comissionados));
+            Mage::dispatchEvent('moip_insert_custom_split', array('splitdata' => $splitdata)) ;
+            $comissionados = $splitdata->getComissionados();
         }
-        
 
         return $comissionados;
     }
