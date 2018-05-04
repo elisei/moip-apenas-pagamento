@@ -63,7 +63,7 @@ class Moip_Transparente_Model_Observer
             $order_moip = str_replace("ORD-", "", $orderIdMoip);
             $model->setMagePay($mage_pay)->setMoipOrder($order_moip)->setCustomerEmail($email)->setCustomerId($customerId)->setFormaPagamento($forma_pagamento)->setMoipAmbiente($ambiente)->setMoipFees($fees)->setMoipPay($moipidPay);
             if ($forma_pagamento == "moip_boleto") {
-                $href                       = $responseMoip->_links->payBoleto->redirectHref;
+                $href                       = $responseMoip->_links->payBoleto->printHref;
                 $moip_boleto_expirationDate = $responseMoip->fundingInstrument->boleto->expirationDate;
                 $moip_boleto_lineCode       = $responseMoip->fundingInstrument->boleto->lineCode;
 
@@ -93,7 +93,8 @@ class Moip_Transparente_Model_Observer
                 $model->setMoipCardInstallment($moip_card_installmentCount)->setMoipCardBrand($moip_card_brand)->setMoipCardId($moip_card_id)->setMoipCardFirst6($moip_card_first6)->setMoipCardLast4($moip_card_last4)->setMoipCardBirthdate($moip_card_birthdate)->setMoipCardTaxdocument($moip_card_taxDocument)->setMoipCardFullname($moip_card_fullname);
             }
             $model->save();
-
+            $order->sendNewOrderEmail();
+            $order->setEmailSent(true);
             return $this;
 
         }
@@ -102,7 +103,7 @@ class Moip_Transparente_Model_Observer
     public function setInit($order){
         if($order){
 
-            if($this->getModuleConfig('type_status_init') == "onhold") {
+            if($this->getModuleConfig('type_status_init') === "onhold") {
                 $mage_pay         = $order->getId();
                 $forma_pagamento  = $order->getPayment()->getMethodInstance()->getCode();
                 if ($forma_pagamento == "moip_boleto" || $forma_pagamento == "moip_tef" || $forma_pagamento == "moip_cc") {
@@ -130,7 +131,7 @@ class Moip_Transparente_Model_Observer
                 return $this;
             }
 
-            if($this->getModuleConfig('type_status_init') == "pending_payment") {
+            if($this->getModuleConfig('type_status_init') === "pending_payment") {
                 $mage_pay         = $order->getId();
                 $forma_pagamento  = $order->getPayment()->getMethodInstance()->getCode();
                 if ($forma_pagamento == "moip_boleto" || $forma_pagamento == "moip_tef" || $forma_pagamento == "moip_cc") {
@@ -158,8 +159,9 @@ class Moip_Transparente_Model_Observer
                 return $this;
             }
 
-            if($this->getModuleConfig('type_status_init') ==  "not"){
-                 $order->save();
+            if($this->getModuleConfig('type_status_init') ===  "not"){
+                $order->save();
+                return $this;
             }
             
         }

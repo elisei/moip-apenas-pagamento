@@ -25,7 +25,6 @@ class MOIP_Transparente_Model_Api
     {
         return $this->getCheckout()->getQuote();
     }
-
     public function normalizeComissao($comissionados){
 
        $_i = 0;
@@ -85,10 +84,7 @@ class MOIP_Transparente_Model_Api
     public function getListaComissoesAvancadas($quote)
     {
 
-        $comissionados[0] =  array(
-                                'moipAccount' => array('id' => Mage::getStoreConfig('moipall/mktplacet_config/mpa')),
-                                'type' => "PRIMARY",
-                            );
+       
 
 
         
@@ -98,6 +94,13 @@ class MOIP_Transparente_Model_Api
         $storeId   = Mage::app()->getStore()->getStoreId();
 
         $split_type             = Mage::getStoreConfig('moipall/mktplacet_config/split_type');
+
+        if($split_type != "fullstoreview") {
+             $comissionados[0] =  array(
+                                'moipAccount' => array('id' => Mage::getStoreConfig('moipall/mktplacet_config/mpa')),
+                                'type' => "PRIMARY",
+                            );
+        }
 
         if($split_type == 'attributeproduct'){
             $attribute_mpa          = Mage::getStoreConfig('moipall/mktplacet_config/mpa_forprod');
@@ -126,8 +129,8 @@ class MOIP_Transparente_Model_Api
                 }
             }
         } elseif($split_type == 'perstoreview') {
-            $attribute_mpa          = Mage::getStoreConfig('moipall/mktplacet_config/mpa_store');
-            $attribute_commisao     = Mage::getStoreConfig('moipall/mktplacet_config/value_store');
+            $attribute_mpa          = Mage::app()->getWebsite()->getConfig('moipall/mktplacet_config/mpa_store');
+            $attribute_commisao     = Mage::app()->getWebsite()->getConfig('moipall/mktplacet_config/value_store');
     
 
             foreach ($items as $key => $item) {
@@ -146,21 +149,22 @@ class MOIP_Transparente_Model_Api
                         );
                 }
             }
-        } elseif($split_type == 'fulldirect') {
-            $attribute_mpa          = Mage::getStoreConfig('moipall/mktplacet_config/mpa_store_full');
-    
-           
-                if($attribute_mpa){
-                    $comissionados[]    = array(
-                            'moipAccount' => array('id' => $attribute_mpa),
-                            'type' => "SECONDARY",
-                            'amount' => array('fixed' => number_format($quote->getGrandTotal(), 2, '', '')),
-                            "feePayor" => "true",
-                        );
-                }
-           
+        } elseif($split_type == 'fullstoreview') {
+            
+            $mpa_secundary     = Mage::app()->getWebsite()->getConfig('moipall/mktplacet_config/mpa_store');
+          
+            $comissionados[]    = array(
+                    'moipAccount' => array('id' => $mpa_secundary),
+                    'type' => "SECONDARY",
+                    'amount' => array('fixed' => number_format($quote->getGrandTotal(), 2, '', '')),
+                    'feePayor' => "true"
+                );
+            
         } else{
-            // Você pode personalizar seu método de split aqui! :D 
+            // Você pode personalizar seu método de split aqui, ou usar o falso evento que criamos :D (coloaboraçaõ de @Denis Barboni) 
+            $splitdata = new Varien_Object(array('quote' => $quote, 'comissionados' => $comissionados));
+            Mage::dispatchEvent('moip_insert_custom_split', array('splitdata' => $splitdata)) ;
+            $comissionados = $splitdata->getComissionados();
 
         }
         
@@ -287,7 +291,6 @@ class MOIP_Transparente_Model_Api
         $currency_code = Mage::app()->getStore()->getCurrentCurrencyCode();
         $cep           = substr(preg_replace("/[^0-9]/", "", $b->getPostcode()) . '00000000', 0, 8);
         $billing_cep   = substr(preg_replace("/[^0-9]/", "", $a->getPostcode()) . '00000000', 0, 8);
-        
         $dob           = Mage::app()->getLocale()->date($quote->getCustomerDob(), null, null, true)->toString('Y-MM-dd');
         if(!$quote->getCustomerDob()){
             $dob = date('Y-m-d', strtotime($dob . ' -1 day'));
@@ -411,17 +414,9 @@ class MOIP_Transparente_Model_Api
         );
         $use_split = Mage::getStoreConfig('moipall/mktplacet_config/enable_split');
         if($use_split){
-
-            $split_type = Mage::getStoreConfig('moipall/mktplacet_config/split_type');
             $comissoes = $this->getListaComissoesAvancadas($quote);
-            if($split_type == "attributeproduct"){
-                $normalize = $this->normalizeComissao($comissoes);
-                $array_receivers = array("receivers" => $normalize);   
-            } else {
-                $array_receivers = array("receivers" => $comissoes);
-            }
-            
-            
+            $normalize = $this->normalizeComissao($comissoes);
+            $array_receivers = array("receivers" => $normalize);
             $json_order = array_merge($json_order, $array_receivers);
         }
         $json_order    = Mage::helper('core')->jsonEncode((object) $json_order);
@@ -573,11 +568,13 @@ class MOIP_Transparente_Model_Api
     public function getPaymentJsonBoleto($info, $quote)
     {
         $additionaldata = unserialize($info->getAdditionalData());
+        $NDias = Mage::getStoreConfig('payment/moip_boleto/vcmentoboleto');
+        $diasUteis = Mage::getStoreConfig('payment/moip_boleto/vcmentoboleto_diasuteis');
         $json           = array(
             "fundingInstrument" => array(
                 "method" => "BOLETO",
                 "boleto" => array(
-                    "expirationDate" => $this->getDataVencimento(Mage::getStoreConfig('payment/moip_boleto/vcmentoboleto')),
+                    "expirationDate" => $this->getDataVencimento($NDias, $diasUteis),
                     "instructionLines" => array(
                         "first" => "Pagamento do pedido na loja: " . Mage::getStoreConfig('payment/moip_transparente_standard/apelido'),
                         "second" => "Não Receber após o Vencimento",
@@ -592,12 +589,14 @@ class MOIP_Transparente_Model_Api
     public function getPaymentJsonTef($info, $quote)
     {
         $additionaldata = unserialize($info->getAdditionalData());
+        $NDias = Mage::getStoreConfig('payment/moip_boleto/vcmentotef');
+        $diasUteis = Mage::getStoreConfig('payment/moip_boleto/vcmentotef_diasuteis');
         $json           = array(
             "fundingInstrument" => array(
                 "method" => "ONLINE_BANK_DEBIT",
                 "onlineBankDebit" => array(
                     "bankNumber" => $additionaldata['banknumber_moip'],
-                    "expirationDate" => $this->getDataVencimento(Mage::getStoreConfig('payment/tef_boleto/vcmentotef')),
+                    "expirationDate" => $this->getDataVencimento($NDias, $diasUteis),
                     "returnUri" => Mage::getBaseUrl()
                 )
             )
@@ -605,18 +604,22 @@ class MOIP_Transparente_Model_Api
         $json           = Mage::helper('core')->jsonEncode((object) $json);
         return $json;
     }
-    public function getDataVencimento($NDias)
+    public function getDataVencimento($NDias, $diasUteis)
     {
         $DataAct = date("Ymd");
         $d       = new DateTime($DataAct);
         $t       = $d->getTimestamp();
-        for ($i = 0; $i < $NDias; $i++) {
-            $addDay  = 86400;
-            $nextDay = date('w', ($t + $addDay));
-            if ($nextDay == 0 || $nextDay == 6) {
-                $i--;
+        if ((bool) $diasUteis) {
+            for ($i = 0; $i < $NDias; $i++) {
+                $addDay = 86400;
+                $nextDay = date('w', ($t + $addDay));
+                if ($nextDay == 0 || $nextDay == 6) {
+                    $i--;
+                }
+                $t = $t + $addDay;
             }
-            $t = $t + $addDay;
+        }else {
+            $t += 86400 * $NDias;
         }
         $d->setTimestamp($t);
         return $d->format('Y-m-d');
@@ -787,12 +790,11 @@ class MOIP_Transparente_Model_Api
 
         if(Mage::getSingleton('transparente/standard')->getConfigData('log') == 1){
             $dir_log = Mage::getBaseDir('var').'/log/MOIP/';
-
             if (!file_exists($dir_log)) {
                 mkdir($dir_log, 0755, true);
             }
 
-            Mage::log($variable, null, 'MOIP/'.$name_log, true);    
+            Mage::log($variable, null, 'MOIP/'.$name_log, true);
         } else {
             
         }
