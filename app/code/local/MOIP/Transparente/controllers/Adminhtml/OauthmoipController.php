@@ -196,8 +196,8 @@ class MOIP_Transparente_Adminhtml_OauthmoipController extends  Mage_Adminhtml_Co
 	          	$url = "https://connect-sandbox.moip.com.br/oauth/token";
 	        	$header = "Authorization: Basic " . base64_encode(MOIP_Transparente_Model_Api::TOKEN_TEST . ":" . MOIP_Transparente_Model_Api::KEY_TEST);
 	        	$array_json = array(
-		        	'client_id' => 'APP-9MUFQ39Y4CQU', //Alterar aqui tb....
-		        	'client_secret' => '26xa86dbc7mhdyqq2w69vscvhz47cri', //Alterar aqui tb....
+		        	'client_id' => $this->getApi()->getAppId("teste"),
+		        	'client_secret' => $this->getApi()->getClienteSecret("teste"),
 					'redirect_uri' => 'http://moip.o2ti.com/magento/redirect/',
 					'grant_type' => 'authorization_code',
 					'code' => $code
@@ -208,8 +208,8 @@ class MOIP_Transparente_Adminhtml_OauthmoipController extends  Mage_Adminhtml_Co
               	$url = "https://connect.moip.com.br/oauth/token";
 		        $header = "Authorization: Basic " . base64_encode(MOIP_Transparente_Model_Api::TOKEN_PROD . ":" . MOIP_Transparente_Model_Api::KEY_PROD);
 		        $array_json = array(
-			        	'client_id' => 'APP-AKYBMMVU1FL1', //Alterar aqui tb....
-			        	'client_secret' => 'db9pavx8542khvsyn3s0tpxyu2gom2m', //Alterar aqui tb....
+			        	'client_id' =>  $this->getApi()->getAppId("prod"),
+			        	'client_secret' => $this->getApi()->getClienteSecret("prod"),
 						'redirect_uri' => 'http://moip.o2ti.com/magento/redirect/',
 						'grant_type' => 'authorization_code',
 						'code' => $code

@@ -71,6 +71,7 @@ class MOIP_Transparente_Model_Method_Cc extends Mage_Payment_Model_Method_Abstra
         }
         $info->setCcCidEnc($info->encrypt($info->getCcCid()));
         $info->setCcNumber(null)->setCcCid(null);
+        $this->getMethodJuros();
         return $this;
     }
     public function prepare()
@@ -268,7 +269,8 @@ class MOIP_Transparente_Model_Method_Cc extends Mage_Payment_Model_Method_Abstra
         }
     }
     public function getMethodJuros()
-    {
+    {   
+        $parcela        = null;
         $quote          = $this->getQuote();
         $info           = $quote->getPayment();
         $additionaldata = unserialize($info->getAdditionalData());
@@ -277,7 +279,7 @@ class MOIP_Transparente_Model_Method_Cc extends Mage_Payment_Model_Method_Abstra
         } else {
             $parcela = $additionaldata['installmentcountcofre_moip'];
         }
-        if (!$quote->getFeeAmount())
+        
             $juros = $this->setJurosMoip($quote, $parcela);
         return $this;
     }
@@ -296,9 +298,9 @@ class MOIP_Transparente_Model_Method_Cc extends Mage_Payment_Model_Method_Abstra
             $address->save();
             $juros = $address->getFeeAmount();
             $total = $total_geral - $juros;
-            $parcelamento   = $api->getParcelamento();
-            if($parcelamento && $parcela){
-                $balance        = $parcelamento[$parcela]['total_juros'];
+            $installment =  Mage::helper('transparente')->getCalcInstallment($total_geral);
+            if($installment && $parcela){
+                $balance        = $installment[$parcela]['total_interest'];
                 $address->setFeeAmount($balance);
                 $address->setBaseFeeAmount($balance);
                 $address->setGrandTotal($address->getGrandTotal() + $address->getFeeAmount());

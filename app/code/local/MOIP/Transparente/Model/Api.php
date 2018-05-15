@@ -1,12 +1,16 @@
 <?php
 class MOIP_Transparente_Model_Api
 {
-    const TOKEN_TEST = "8OKLQFT5XQZXU7CKXX43GPJOMIJPMSMF";
-    const KEY_TEST = "NT0UKOXS4ALNSVOXJVNXVKRLEOQCITHI5HDKW3LI";
-    const ENDPOINT_TEST = "https://sandbox.moip.com.br/v2/";
-    const TOKEN_PROD = "EVCHBAUMKM0U4EE4YXIA8VMC0KBEPKN2";
-    const KEY_PROD = "4NECP62EKI8HRSMN3FGYOZNVYZOMBDY0EQHK9MHO";
-    const ENDPOINT_PROD = "https://api.moip.com.br/v2/";
+    const TOKEN_TEST            = "8OKLQFT5XQZXU7CKXX43GPJOMIJPMSMF";
+    const KEY_TEST              = "NT0UKOXS4ALNSVOXJVNXVKRLEOQCITHI5HDKW3LI";
+    const ENDPOINT_TEST         = "https://sandbox.moip.com.br/v2/";
+    const TOKEN_PROD            = "EVCHBAUMKM0U4EE4YXIA8VMC0KBEPKN2";
+    const KEY_PROD              = "4NECP62EKI8HRSMN3FGYOZNVYZOMBDY0EQHK9MHO";
+    const ENDPOINT_PROD         = "https://api.moip.com.br/v2/";
+    const EndPointOauthProd     = "https://connect.moip.com.br/oauth/authorize";
+    const EndPointOauthDev      = "https://connect-sandbox.moip.com.br/oauth/authorize"; 
+    const SCOPE_APP             = "RECEIVE_FUNDS,REFUND,MANAGE_ACCOUNT_INFO,DEFINE_PREFERENCES,RETRIEVE_FINANCIAL_INFO";
+    const responseType          = "code";
   
    
     public function getPayment()
@@ -25,6 +29,34 @@ class MOIP_Transparente_Model_Api
     {
         return $this->getCheckout()->getQuote();
     }
+    public function getAppId($type){
+        if($type == "prod"){
+            if(Mage::getStoreConfig('payment/moip_transparente_standard/type_app') == "d14"){
+               return "APP-2UFTVZ3XW4A8";
+            } elseif(Mage::getStoreConfig('payment/moip_transparente_standard/type_app') == "d30") {
+                return "APP-YLDWLJWZTVDG";
+            }else {
+                return "APP-AKYBMMVU1FL1";
+            }
+            
+        } else {
+            return "APP-9MUFQ39Y4CQU";
+        }
+    }
+    public function getClienteSecret($type){
+        if($type == "prod"){
+            if(Mage::getStoreConfig('payment/moip_transparente_standard/type_app') == "d14"){
+               return "589147b6fdca404c98c4b557e1286cbc";
+            } elseif(Mage::getStoreConfig('payment/moip_transparente_standard/type_app') == "d30") {
+                return "1caa2776d84e4324899efcc6a4699d24";
+            }else {
+                return "db9pavx8542khvsyn3s0tpxyu2gom2m";
+            }
+        } else {
+            return "26xa86dbc7mhdyqq2w69vscvhz47cri";
+        }
+    }
+
     public function normalizeComissao($comissionados){
 
        $_i = 0;
@@ -624,166 +656,6 @@ class MOIP_Transparente_Model_Api
         $d->setTimestamp($t);
         return $d->format('Y-m-d');
     }
-    
-    public function getParcelamento(){
-        $valor = $this->getQuote()->getGrandTotal();
-        $config_parcelas_juros = $this->getInfoParcelamentoJuros();
-        $config_parcelas_minimo = $this->getInfoParcelamentoMinimo();
-        $config_parcelas_maximo = Mage::getStoreConfig('payment/moip_cc/nummaxparcelamax');
-        $json_parcelas = array();
-        $count = 0;
-        $json_parcelas[0] = array(
-                                    'parcela' => Mage::helper('core')->currency($valor, true, false),
-                                    'total_parcelado' =>  Mage::helper('core')->currency($valor, true, false),
-                                    'total_juros' =>  0,
-                                    'juros' => 0
-                                );
-        $json_parcelas[1] = array(
-                                    'parcela' => Mage::helper('core')->currency($valor, true, false),
-                                    'total_parcelado' =>  Mage::helper('core')->currency($valor, true, false),
-                                    'total_juros' =>  0,
-                                    'juros' => 0
-                                );
-
-        
-        $max_div = (int)$valor/$config_parcelas_minimo;
-        if($max_div > $config_parcelas_maximo) {
-            $max_div = $config_parcelas_maximo;
-        } elseif ($max_div > 12) {
-            $max_div = 12;
-        }
-
-        if(Mage::getStoreConfig('payment/moip_cc/parcelas_avancadas') == 1){
-            if($valor > Mage::getStoreConfig('payment/moip_cc/condicional_3_sem_juros') ){
-            $limite = Mage::getStoreConfig('payment/moip_cc/condicional_3_max_parcela');;
-            } elseif ($valor >= Mage::getStoreConfig('payment/moip_cc/condicional_2_sem_juros')) {
-                $limite = Mage::getStoreConfig('payment/moip_cc/condicional_2_max_parcela');
-            } elseif ($valor <= Mage::getStoreConfig('payment/moip_cc/condicional_1_sem_juros')) {
-                $limite = Mage::getStoreConfig('payment/moip_cc/condicional_1_max_parcela');
-            } else {
-                $limite = Mage::getStoreConfig('nummaxparcelamax');
-            }    
-        } else {
-            $limite = $max_div;
-        }
-        
-
-        foreach ($config_parcelas_juros as $key => $value) {
-            if($count <= $max_div){
-                if($value > 0){
-                    if(Mage::getStoreConfig('payment/moip_cc/tipodejuros') == 1) {
-                        if($limite >= $count && Mage::getStoreConfig('payment/moip_cc/parcelas_avancadas')){
-                                $parcela =  $this->getJurosComposto($valor, 0, $count);
-                            } else {
-                                $parcela =  $this->getJurosComposto($valor, $value, $count);
-                            }
-                    } else {
-                        if($limite >= $count && Mage::getStoreConfig('payment/moip_cc/parcelas_avancadas')){
-                            $parcela =  $this->getJurosSimples($valor, 0, $count);
-                        } else {
-                            $parcela =  $this->getJurosSimples($valor, $value, $count);
-                        }
-                    }
-                    
-                    $total_parcelado = $parcela * $count;
-                    $juros = $value;
-                    if($parcela > 5 && $parcela > $config_parcelas_minimo){
-                        $json_parcelas[$count] = array(
-                            'parcela' => Mage::helper('core')->currency($parcela, true, false),
-                            'total_parcelado' =>  Mage::helper('core')->currency($total_parcelado, true, false),
-                            'total_juros' =>  $total_parcelado - $valor,
-                            'juros' => $juros,
-                        );
-                    }
-                } else {
-                    if($valor > 0 && $count > 0){
-                     $json_parcelas[$count] = array(
-                                        'parcela' => Mage::helper('core')->currency(($valor/$count), true, false),
-                                        'total_parcelado' =>  Mage::helper('core')->currency($valor, true, false),
-                                        'total_juros' =>  0,
-                                        'juros' => 0
-                                    );
-                    }
-                }
-            }
-
-            $count++;
-        }
-        foreach ($json_parcelas as $key => $value) {
-            if($key > $limite)
-                unset($json_parcelas[$key]);
-        }
-            
-    return $json_parcelas;
-    }
-    public function getJurosComposto($valor, $juros, $parcela)
-    {
-        $principal = $valor;
-        $taxa = $juros/100;
-        $valParcela = ($principal * $taxa) / (1 - (pow(1 / (1 + $taxa), $parcela)));
-        return $valParcela;
-    }
-
-    public function getJurosSimples($valor, $juros, $parcela)
-    {
-        $principal = $valor;
-        $taxa = $juros/100;
-        $valjuros = $principal * $taxa;
-        $valParcela = ($principal + $valjuros)/$parcela;
-        return $valParcela;
-    }
-
-    public function getInfoParcelamentoJuros() {
-        $juros = array();
-
-        $juros['0'] = 0;
-
-        $juros['1'] = 0;
-
-        $juros['2'] =  Mage::getStoreConfig('payment/moip_cc/parcela2');
-
-        
-        $juros['3'] =  Mage::getStoreConfig('payment/moip_cc/parcela3');
-
-        
-        $juros['4'] =  Mage::getStoreConfig('payment/moip_cc/parcela4');
-
-        
-        $juros['5'] =  Mage::getStoreConfig('payment/moip_cc/parcela5');
-
-
-        $juros['6'] =  Mage::getStoreConfig('payment/moip_cc/parcela6');
-
-
-        $juros['7'] =  Mage::getStoreConfig('payment/moip_cc/parcela7');
-
-
-        $juros['8'] =  Mage::getStoreConfig('payment/moip_cc/parcela8');
-
-
-        $juros['9'] =  Mage::getStoreConfig('payment/moip_cc/parcela9');
-       
-
-        $juros['10'] =  Mage::getStoreConfig('payment/moip_cc/parcela10');
-       
-
-        $juros['11'] =  Mage::getStoreConfig('payment/moip_cc/parcela11');
-       
-
-        $juros['12'] =  Mage::getStoreConfig('payment/moip_cc/parcela12');
-       
-        return $juros;
-    }
-
-     public function getInfoParcelamentoMinimo() {
-       
-        
-        $valor = Mage::getStoreConfig('payment/moip_cc/valor_minimo');
-        
-       
-        return $valor;
-    }
-
     
     public function generateLog($variable, $name_log){
         
