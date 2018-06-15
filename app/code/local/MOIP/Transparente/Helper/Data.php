@@ -11,8 +11,8 @@
  */
 class MOIP_Transparente_Helper_Data extends Mage_Core_Helper_Abstract {
 	
-	const MinAmmout = 5;
-    const MaxInstalment = 12;
+	const MINAMMOUT = 5;
+    const MAXINSTALMENT = 12;
 
     public function getParcelas($price, $method){
         if($price) {
@@ -32,8 +32,14 @@ class MOIP_Transparente_Helper_Data extends Mage_Core_Helper_Abstract {
             endforeach;
             if($method == 'reduzido'){
                 $last_zero_interest = $this->getFilterNoInterestRate($installment);
-                $last_text_zero_interest = end(array_keys($last_zero_interest));
-                return $installments[$last_text_zero_interest-1];
+                if(is_int($last_zero_interest)){
+                    $last_text_zero_interest = end(array_keys($last_zero_interest));
+                    return $installments[$last_text_zero_interest-1];
+                } else {
+                    return end($installments);
+                }
+                
+                
             } elseif($method == 'integral') {
                 return $installments;
             } else {
@@ -94,8 +100,6 @@ class MOIP_Transparente_Helper_Data extends Mage_Core_Helper_Abstract {
         } else {
             return $arr;
         }
-        
-        
     }
     public function getJurosComposto($valor, $juros, $parcela)
     {
@@ -167,12 +171,12 @@ class MOIP_Transparente_Helper_Data extends Mage_Core_Helper_Abstract {
 
     public function getLimitByPortionNumber(){
         $maxconfig = Mage::getStoreConfig('payment/moip_cc/nummaxparcelamax');
-        return ($maxconfig < self::MaxInstalment) ? $maxconfig : self::MaxInstalment;
+        return ($maxconfig < self::MAXINSTALMENT) ? $maxconfig : self::MAXINSTALMENT;
     }
 
     public function getLimitByPlotPrice(){
         $minconfig = Mage::getStoreConfig('payment/moip_cc/valor_minimo');
-        return ($minconfig > self::MinAmmout) ? $minconfig : self::MinAmmout;
+        return ($minconfig > self::MINAMMOUT) ? $minconfig : self::MINAMMOUT;
     }
 
 
@@ -194,5 +198,33 @@ class MOIP_Transparente_Helper_Data extends Mage_Core_Helper_Abstract {
         }
 
         return $limit;
+    }
+
+    public function ClearMoip(){
+        $ambiente = Mage::getSingleton('transparente/standard')->getConfigData('ambiente');
+        
+        $moipdb = Mage::getModel('transparente/transparente');
+        $moipcollection = $moipdb->getCollection()->addFieldToFilter('moip_ambiente', array('eq' => $ambiente))->getItems();
+
+        foreach ($moipcollection as $key => $value) {
+            $value->setMoipCardId(null)->save();
+        }
+
+        $model = new Mage_Core_Model_Config();
+    
+    
+        if (Mage::getSingleton('transparente/standard')->getConfigData('ambiente') == "teste") {
+            $model->deleteConfig('payment/moip_transparente_standard/webhook_key_dev');
+            $model->deleteConfig('payment/moip_transparente_standard/oauth_dev');
+
+        } else {
+            $model->deleteConfig('payment/moip_transparente_standard/webhook_key_prod');
+            $model->deleteConfig('payment/moip_transparente_standard/oauth_prod');
+            
+        }
+        Mage::app()->cleanCache();
+        Mage::getSingleton('core/session')->addSuccess("Configurações atuais foram apagadas. Por favor, repita o processo de instalação.");
+        $redirect_url = (Mage::helper('core/http')->getHttpReferer() ? Mage::helper('core/http')->getHttpReferer() : Mage::helper("adminhtml")->getUrl("*/system_config/edit/section/payment/"));
+        Mage::app()->getFrontController()->getResponse()->setRedirect($redirect_url);
     }
 }

@@ -97,11 +97,11 @@ class MOIP_Transparente_Block_Form_Cc extends Mage_Payment_Block_Form {
 			$image_brand = $this->getVisaImage();
 		} elseif ($brand == "MASTERCARD") {
 			$image_brand = $this->getMastercardImage();
-		} elseif ($brand == "AMERICANEXPRESS") {
+		} elseif ($brand == "AMEX") {
 			$image_brand = $this->getAmericanExpressImage();
 		} elseif ($brand == "DINERS") {
 			$image_brand = $this->getDinersImage();
-		} elseif ($brand == "HIPPERCARD") {
+		} elseif ($brand == "HIPERCARD") {
 			$image_brand = $this->getHipercardImage();
 		} elseif ($brand == "HIPER") {
 			$image_brand = $this->getHiperImage();
@@ -141,11 +141,11 @@ class MOIP_Transparente_Block_Form_Cc extends Mage_Payment_Block_Form {
 			if($collection->getSize() >= 1){
 				return $collection;
 			} else {
-				return 'false';
+				return false;
 			}
 
 		} else {
-			return 'false';
+			return false;
 		}
 
 	}

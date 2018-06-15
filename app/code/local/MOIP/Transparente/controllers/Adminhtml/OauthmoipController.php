@@ -123,22 +123,8 @@ class MOIP_Transparente_Adminhtml_OauthmoipController extends  Mage_Adminhtml_Co
 	}
 	
 	public function ClearMoipAction(){
-		$model = new Mage_Core_Model_Config();
-		
-		
-			if (Mage::getSingleton('transparente/standard')->getConfigData('ambiente') == "teste") {
-				$model->deleteConfig('payment/moip_transparente_standard/webhook_key_dev');
-				$model->deleteConfig('payment/moip_transparente_standard/oauth_dev');
-
-			} else {
-				$model->deleteConfig('payment/moip_transparente_standard/webhook_key_prod');
-				$model->deleteConfig('payment/moip_transparente_standard/oauth_prod');
-				
-			}
-			Mage::app()->cleanCache();
-			Mage::getSingleton('core/session')->addSuccess("Configurações atuais foram apagadas. Por favor, repita o processo de instalação.");
-			$redirect_url = (Mage::helper('core/http')->getHttpReferer() ? Mage::helper('core/http')->getHttpReferer() : Mage::helper("adminhtml")->getUrl("*/system_config/edit/section/payment/"));
-			Mage::app()->getFrontController()->getResponse()->setRedirect($redirect_url);
+			
+		return Mage::helper('transparente')->ClearMoip();
 		
 	}
 
