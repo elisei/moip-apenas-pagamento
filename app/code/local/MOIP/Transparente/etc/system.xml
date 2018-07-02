@@ -80,6 +80,8 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <validate>validate-length minimum-length-2 maximum-length-13</validate>
+                            <comment>Essa informação será exibida na fatura do cliente, máximo permitido de 13 caracteres</comment>
                         </apelido>
                         
                         <title_config_mage translate="label">
@@ -1032,7 +1034,7 @@
                         </webhooks_dev>
                     </fields>
                 </advanced_reset>
-               <!--  <oneclick_config>
+                <oneclick_config>
                     <label>Compra com 1 Click</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>6</sort_order>
@@ -1092,7 +1094,7 @@
                             
                         </type_min_installment>
                     </fields>
-                </oneclick_config> -->
+                </oneclick_config>
                 <mktplacet_config>
                     <label>Split - Divisão de valores</label>
                     <frontend_type>text</frontend_type>

@@ -8,6 +8,12 @@ class Moip_Transparente_Model_Observer
         return $api;
     }
 
+    public function addWidgetJs(Varien_Event_Observer $observer){
+        /*var_dump("olasrrrrr");die;*/
+        $update = Mage::getSingleton('core/layout')->getUpdate()->addHandle('MOIP_TRANSPARENTE_WIDGET_JS');
+        return $this;
+
+    }
     
     public function changeAPP(Varien_Event_Observer $observer){
         $new = Mage::getStoreConfig('payment/moip_transparente_standard/type_app');

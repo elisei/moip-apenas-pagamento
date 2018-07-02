@@ -806,7 +806,7 @@ class MOIP_Transparente_Model_Api
         if ($additionaldata['use_cofre'] == 0) {
             $json = array(
                 "installmentCount" => $additionaldata['installmentcount_moip'],
-                /*"statementDescriptor" => substr(Mage::getStoreConfig('payment/moip_transparente_standard/apelido'), 0, 13),*/
+                "statementDescriptor" => substr(Mage::getStoreConfig('payment/moip_transparente_standard/apelido'), 0, 13),
                 
                 "fundingInstrument" => array(
                     "method" => "CREDIT_CARD",

@@ -1,23 +1,25 @@
 <?php
-/**
- * Transparente - Transparente Payment Module
- *
- * @title      Magento -> Custom Payment Module for Transparente (Brazil)
- * @category   Payment Gateway
- * @package    MOIP_Transparente
- * @author     Transparente Pagamentos S/a
- * @copyright  Copyright (c) 2010 Transparente Pagamentos S/A
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
 
 class MOIP_Transparente_Block_Form_Cc extends Mage_Payment_Block_Form {
 
 	protected function _construct() {
+
 		$this->setTemplate('MOIP/transparente/form/cc.phtml');
-		parent::_construct();
+		return parent::_construct();
 	}
 
-
+	protected function _prepareLayout(){
+		if($this->getLayout()->getBlock('head')){
+			$this->getLayout()->getBlock('head')->addJs('MOIP/core/jquery.js');
+        	$this->getLayout()->getBlock('head')->addJs('MOIP/core/jquery_noconflict.js');
+        	$this->getLayout()->getBlock('head')->addJs('MOIP/transparente/moip.js');
+        	$block = $this->getLayout()->createBlock('core/template')->setTemplate('MOIP/transparente/form/external_js.phtml');
+          	$this->getLayout()->getBlock('content')->append($block);
+		}
+        
+        return parent::_prepareLayout();
+    }
+		
 	
 	public function getPublicKey(){
 		if (Mage::getSingleton('transparente/standard')->getConfigData('ambiente') == "teste") {
@@ -177,7 +179,12 @@ class MOIP_Transparente_Block_Form_Cc extends Mage_Payment_Block_Form {
 
 	
 	public function getCheckout() {
-		return Mage::getSingleton('checkout/session');
+		if(!Mage::app()->getStore()->isAdmin()) {
+			return Mage::getSingleton('checkout/session');
+		} else {
+			return Mage::getSingleton('adminhtml/session_quote');
+		}
+		
 	}
 
 

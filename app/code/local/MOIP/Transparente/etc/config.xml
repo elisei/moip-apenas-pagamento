@@ -261,7 +261,7 @@
                 <model>MOIP_Transparente_Model_Standard</model>
                 <type_app>fluxo</type_app>
                 <type_old_app>fluxo</type_old_app>
-                <apelido>ALTERE PARA O NOME DA SUA EMPRESA</apelido>
+                <apelido>NOME DA EMPRESA</apelido>
                 <ambiente>producao</ambiente>
                 <order_status>pending</order_status>
                 <payment_action>order</payment_action>
