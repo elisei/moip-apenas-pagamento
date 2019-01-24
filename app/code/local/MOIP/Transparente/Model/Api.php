@@ -315,29 +315,21 @@ class MOIP_Transparente_Model_Api
             $dob_year += 1900;
         }
         $dob = $dob_year."-".$dob_month."-".$dob_day;
-
+        
+        // se não usar o taxvat altere para o field que usar.
         $taxvat        = $order->getCustomerTaxvat();
         $taxvat        = preg_replace("/[^0-9]/", "", $taxvat);
 
-        if (strlen($taxvat) > 11) {
+        if (strlen($taxvat) === 14) {
             $document_type = "CNPJ";
         } else {
             $document_type = "CPF";
         }
-
-        if ($order->getCustomer()->getCnpj()) {
-
-            if (!$a->getCompany()) {
-                $nome = $order->getCustomerRazaosocial(). " - ".$order->getCustomerCnpj();
-            } else {
-                $nome = $a->getCompany()." - ".$order->getCustomer()->getCnpj();
-            }
-
-            if($document_type != "CNPJ"){
-                $taxvat = $order->getCustomer()->getCnpj();
-                $document_type = "CNPJ";  
-            }
-            
+        
+        
+        if ($document_type == "CNPJ") {
+            //voce pode alterar aqui o nome do comprador enviado.
+            $nome = $b->getFirstname(). " - ".$taxvat;
         } else {
             $nome =  $b->getFirstname() . ' ' . $b->getLastname();
         }
